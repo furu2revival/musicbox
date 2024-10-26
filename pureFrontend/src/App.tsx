@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { MusicSheetEditor } from "./components/MusicSheetEditor";
 
 function App() {
-	return <>hello</>;
+	return <MusicSheetEditor />;
 }
 
 export default App;

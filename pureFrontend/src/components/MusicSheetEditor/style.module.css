@@ -1,0 +1,12 @@
+.root{
+width: 100%;
+}
+
+.music-box-position{
+position: absolute;
+left: 0;
+}
+
+.sheet-table-position{
+position: absolute;
+}
