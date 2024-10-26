@@ -14,6 +14,7 @@ func (u Usecase) Create(ctx context.Context, rctx request_context.RequestContext
 		return model.MusicSheet{}, err
 	}
 	err = u.conn.BeginRwTransaction(ctx, func(ctx context.Context, tx transaction.Transaction) error {
+		// Save は冪等なメソッドなので、API の冪等性も保証できている。
 		err = u.musicSheetRepo.Save(ctx, tx, musicSheet)
 		if err != nil {
 			return err

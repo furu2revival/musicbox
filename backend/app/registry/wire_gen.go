@@ -13,10 +13,12 @@ import (
 	"github.com/furu2revival/musicbox/app/adapter/handler/music_sheet_handler"
 	"github.com/furu2revival/musicbox/app/adapter/repoimpl"
 	"github.com/furu2revival/musicbox/app/adapter/repoimpl/echo_repoimpl"
+	"github.com/furu2revival/musicbox/app/adapter/repoimpl/music_sheet_repoimpl"
 	"github.com/furu2revival/musicbox/app/infrastructure/connect/aop"
 	"github.com/furu2revival/musicbox/app/infrastructure/db"
 	"github.com/furu2revival/musicbox/app/usecase"
 	"github.com/furu2revival/musicbox/app/usecase/echo_usecase"
+	"github.com/furu2revival/musicbox/app/usecase/music_sheet_usecase"
 	"github.com/google/wire"
 	"net/http"
 )
@@ -24,15 +26,17 @@ import (
 // Injectors from wire.go:
 
 func InitializeAPIServerMux(ctx context.Context) (*http.ServeMux, error) {
-	proxy := aop.NewProxy()
-	musicSheetServiceHandler := music_sheet_handler.NewHandler(proxy)
 	connection, err := db.NewConnection()
 	if err != nil {
 		return nil, err
 	}
+	musicSheetRepository := music_sheet_repoimpl.NewRepository()
+	usecase := music_sheet_usecase.NewUsecase(connection, musicSheetRepository)
+	proxy := aop.NewProxy()
+	musicSheetServiceHandler := music_sheet_handler.NewHandler(usecase, proxy)
 	echoRepository := echo_repoimpl.NewRepository()
-	usecase := echo_usecase.NewUsecase(connection, echoRepository)
-	echoServiceHandler := echo_handler.NewHandler(usecase, proxy)
+	echo_usecaseUsecase := echo_usecase.NewUsecase(connection, echoRepository)
+	echoServiceHandler := echo_handler.NewHandler(echo_usecaseUsecase, proxy)
 	serveMux := handler.New(musicSheetServiceHandler, echoServiceHandler)
 	return serveMux, nil
 }
