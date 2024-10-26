@@ -1,24 +1,47 @@
+table {
+	border-collapse: collapse;
+}
+
+/* 2行おきに背景色をグレーに */
+table tr:nth-child(2n) {
+	background-color: #f0f0f0; /* お好みのグレー色に調整可能 */
+}
+
 /* 4行おきに黒の縦線 */
-table th:nth-child(4n),
-table td:nth-child(4n) {
-    border-right: 2px solid red;
+table th:nth-child(4n + 1),
+table td:nth-child(4n + 1) {
+	border-right: 2px solid red;
 }
 
 /* それ以外をグレーの縦線 */
-table th:not(:nth-child(4n)),
-table td:not(:nth-child(4n)) {
-    border-right: 1px solid gray;
+table th:not(:nth-child(4n + 1)),
+table td:not(:nth-child(4n + 1)) {
+	border-right: 1px solid gray;
 }
 
-
-table tr:first-child{
-    border-left: 1px solid gray;
+/* 4行おきに黒の縦線 */
+table th:nth-child(16n + 1),
+table td:nth-child(16n + 1) {
+	border-right: 4px solid blue;
 }
 
+table tr:first-child {
+	border-left: 1px solid gray;
+}
 
-.shift-left{
-    display:block;
-    position: relative;
-    transform: translateX(-50%);
-    z-index: 1;
+table {
+	height: 80vh;
+}
+
+th,
+td {
+	padding-right: 32px;
+	padding-left: 32px;
+}
+
+.shift-left {
+	display: block;
+	position: relative;
+	transform: translateX(-50%);
+	z-index: 1;
 }

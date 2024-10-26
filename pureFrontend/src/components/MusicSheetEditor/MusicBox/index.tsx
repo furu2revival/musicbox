@@ -3,20 +3,20 @@ import style from "./style.module.css";
 
 type Props = {
 	className?: string;
-	height: number;
+	onShare: () => void;
+	onReset: () => void;
 };
 
-export const MusicBox = ({ className, height }: Props) => {
+export const MusicBox = ({ className, onShare, onReset }: Props) => {
 	return (
-		<div
-			className={`${style.root} ${className}`}
-			style={{
-				height,
-			}}
-		>
-			<button type="button">共有</button>
+		<div className={`${style.root} ${className}`}>
+			<button type="button" onClick={onShare}>
+				共有
+			</button>
 			<Propeller />
-			<button type="button">削除</button>
+			<button type="button" onClick={onReset}>
+				削除
+			</button>
 		</div>
 	);
 };

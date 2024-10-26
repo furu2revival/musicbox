@@ -12,9 +12,15 @@ type Props = {
 export const SheetTable = ({ notes, onChange, className }: Props) => {
 	return (
 		<div className={className}>
-			<table>
+			<table
+				style={{
+					height: "full",
+					width: "full",
+				}}
+			>
 				<thead>
 					<tr>
+						<th />
 						{notes.map(({ pitch }, i) => (
 							<th key={pitch.join(",")}>{i}</th>
 						))}
@@ -24,16 +30,14 @@ export const SheetTable = ({ notes, onChange, className }: Props) => {
 					{PITCHES.map((pitch) => {
 						return (
 							<tr key={pitch}>
+								<td width={200}>{pitch}</td>
 								{notes.map((note, i) => {
 									return (
 										// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 										<td
 											// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 											key={pitch + i}
-											onClick={() => {
-												console.log("click");
-												onChange?.(i, pitch);
-											}}
+											onClick={() => onChange?.(i, pitch)}
 										>
 											<span className={style["shift-right"]}>
 												{note.pitch.filter((p) => p === pitch).length
