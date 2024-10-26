@@ -10,6 +10,7 @@ import (
 	"github.com/furu2revival/musicbox/app/usecase/music_sheet_usecase"
 	"github.com/furu2revival/musicbox/protobuf/api"
 	"github.com/furu2revival/musicbox/protobuf/api/apiconnect"
+	"github.com/google/uuid"
 )
 
 type handler struct {
@@ -21,30 +22,12 @@ func NewHandler(uc *music_sheet_usecase.Usecase, proxy aop.Proxy) apiconnect.Mus
 }
 
 func (h handler) GetV1(ctx context.Context, req *aop.Request[*api.MusicSheetServiceGetV1Request]) (*api.MusicSheetServiceGetV1Response, error) {
-	result, err := h.uc.Get(ctx, req.RequestContext(), req.Msg().GetMusicSheetId())
+	result, err := h.uc.Get(ctx, req.RequestContext(), uuid.MustParse(req.Msg().GetMusicSheetId()))
 	if err != nil {
 		return nil, err
 	}
 	return &api.MusicSheetServiceGetV1Response{
 		MusicSheet: pbconv.ToMusicSheetPb(result),
-		// MusicSheet: &api.MusicSheet{
-		// 	MusicSheetId: uuid.NewString(),
-		// 	Title:        "dummy",
-		// 	Notes: []*api.Note{
-		// 		{
-		// 			Pitches: []api.Pitch{
-		// 				api.Pitch_PITCH_C3,
-		// 				api.Pitch_PITCH_D3,
-		// 			},
-		// 		},
-		// 		{
-		// 			Pitches: []api.Pitch{
-		// 				api.Pitch_PITCH_C3,
-		// 				api.Pitch_PITCH_D3,
-		// 			},
-		// 		},
-		// 	},
-		// },
 	}, nil
 }
 
