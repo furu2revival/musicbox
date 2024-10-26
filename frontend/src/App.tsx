@@ -1,8 +1,7 @@
 import { MusicSheetEditor } from "./components/MusicSheetEditor";
 
 function App() {
-
-	return <MusicSheetEditor musicSheet={}/>;
+	return <MusicSheetEditor maxNotes={64} musicSheet={undefined} />;
 }
 
 export default App;

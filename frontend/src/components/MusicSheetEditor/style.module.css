@@ -1,0 +1,8 @@
+.root {
+	display: flex;
+	height: 80vh;
+}
+
+.heightMax {
+	height: 100%;
+}
