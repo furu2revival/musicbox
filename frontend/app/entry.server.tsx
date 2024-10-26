@@ -14,6 +14,8 @@ import { renderToPipeableStream } from "react-dom/server";
 
 const ABORT_DELAY = 5_000;
 
+const errorStatusCode = 500;
+
 export default function handleRequest(
 	request: Request,
 	responseStatusCode: number,
@@ -22,6 +24,7 @@ export default function handleRequest(
 	// This is ignored so we can keep it in the template for visibility.  Feel
 	// free to delete this parameter in your app if you're not using it!
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// biome-ignore lint/correctness/noUnusedVariables:
 	loadContext: AppLoadContext
 ) {
 	return isbot(request.headers.get("user-agent") || "")
