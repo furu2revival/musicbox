@@ -6,7 +6,6 @@
 
 - AWS
 - Terraform
-- terraform-docs
 - tflint
 
 ## ファイルストラクチャ
@@ -71,10 +70,4 @@ output:
     <!-- BEGIN_TF_DOCS -->
     {{ .Content }}
     <!-- END_TF_DOCS -->
-```
-
-### ドキュメントの生成
-
-```shell
-terraform-docs modules/<service-name>
 ```
