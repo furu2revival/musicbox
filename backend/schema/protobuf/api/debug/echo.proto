@@ -1,7 +1,6 @@
 syntax = "proto3";
 package api.debug;
 
-import "custom_option/custom_option.proto";
 import "google/protobuf/timestamp.proto";
 
 service EchoService {

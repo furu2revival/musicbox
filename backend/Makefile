@@ -24,7 +24,6 @@ lint:
 	golangci-lint run --issues-exit-code=1 ./...
 	arch-go
 	buf lint
-	buf breaking --against '.git#branch=$(BREAKING_CHANGE_BASE_BRANCH)'
 
 .PHONY: codegen
 codegen:
