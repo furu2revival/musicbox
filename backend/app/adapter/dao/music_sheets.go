@@ -555,7 +555,7 @@ func (o *MusicSheet) AddNotes(ctx context.Context, exec boil.ContextExecutor, in
 				strmangle.SetParamNames("\"", "\"", 1, []string{"music_sheet_id"}),
 				strmangle.WhereClause("\"", "\"", 2, notePrimaryKeyColumns),
 			)
-			values := []interface{}{o.MusicSheetID, rel.NoteID}
+			values := []interface{}{o.MusicSheetID, rel.Index, rel.MusicSheetID}
 
 			if boil.IsDebug(ctx) {
 				writer := boil.DebugWriterFrom(ctx)

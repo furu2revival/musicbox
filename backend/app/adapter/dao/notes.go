@@ -24,42 +24,42 @@ import (
 
 // Note is an object representing the database table.
 type Note struct {
-	NoteID       string           `boil:"note_id" json:"note_id" toml:"note_id" yaml:"note_id"`
 	MusicSheetID string           `boil:"music_sheet_id" json:"music_sheet_id" toml:"music_sheet_id" yaml:"music_sheet_id"`
 	Pitches      types.Int64Array `boil:"pitches" json:"pitches" toml:"pitches" yaml:"pitches"`
 	CreatedAt    time.Time        `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt    time.Time        `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	Index        int              `boil:"index" json:"index" toml:"index" yaml:"index"`
 
 	R *noteR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L noteL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var NoteColumns = struct {
-	NoteID       string
 	MusicSheetID string
 	Pitches      string
 	CreatedAt    string
 	UpdatedAt    string
+	Index        string
 }{
-	NoteID:       "note_id",
 	MusicSheetID: "music_sheet_id",
 	Pitches:      "pitches",
 	CreatedAt:    "created_at",
 	UpdatedAt:    "updated_at",
+	Index:        "index",
 }
 
 var NoteTableColumns = struct {
-	NoteID       string
 	MusicSheetID string
 	Pitches      string
 	CreatedAt    string
 	UpdatedAt    string
+	Index        string
 }{
-	NoteID:       "notes.note_id",
 	MusicSheetID: "notes.music_sheet_id",
 	Pitches:      "notes.pitches",
 	CreatedAt:    "notes.created_at",
 	UpdatedAt:    "notes.updated_at",
+	Index:        "notes.index",
 }
 
 // Generated where
@@ -85,18 +85,41 @@ func (w whereHelpertypes_Int64Array) GTE(x types.Int64Array) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
 
+type whereHelperint struct{ field string }
+
+func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+func (w whereHelperint) IN(slice []int) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
+}
+func (w whereHelperint) NIN(slice []int) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
+}
+
 var NoteWhere = struct {
-	NoteID       whereHelperstring
 	MusicSheetID whereHelperstring
 	Pitches      whereHelpertypes_Int64Array
 	CreatedAt    whereHelpertime_Time
 	UpdatedAt    whereHelpertime_Time
+	Index        whereHelperint
 }{
-	NoteID:       whereHelperstring{field: "\"notes\".\"note_id\""},
 	MusicSheetID: whereHelperstring{field: "\"notes\".\"music_sheet_id\""},
 	Pitches:      whereHelpertypes_Int64Array{field: "\"notes\".\"pitches\""},
 	CreatedAt:    whereHelpertime_Time{field: "\"notes\".\"created_at\""},
 	UpdatedAt:    whereHelpertime_Time{field: "\"notes\".\"updated_at\""},
+	Index:        whereHelperint{field: "\"notes\".\"index\""},
 }
 
 // NoteRels is where relationship names are stored.
@@ -127,10 +150,10 @@ func (r *noteR) GetMusicSheet() *MusicSheet {
 type noteL struct{}
 
 var (
-	noteAllColumns            = []string{"note_id", "music_sheet_id", "pitches", "created_at", "updated_at"}
-	noteColumnsWithoutDefault = []string{"note_id", "music_sheet_id", "pitches"}
+	noteAllColumns            = []string{"music_sheet_id", "pitches", "created_at", "updated_at", "index"}
+	noteColumnsWithoutDefault = []string{"music_sheet_id", "pitches", "index"}
 	noteColumnsWithDefault    = []string{"created_at", "updated_at"}
-	notePrimaryKeyColumns     = []string{"note_id"}
+	notePrimaryKeyColumns     = []string{"index", "music_sheet_id"}
 	noteGeneratedColumns      = []string{}
 )
 
@@ -586,7 +609,7 @@ func (o *Note) SetMusicSheet(ctx context.Context, exec boil.ContextExecutor, ins
 		strmangle.SetParamNames("\"", "\"", 1, []string{"music_sheet_id"}),
 		strmangle.WhereClause("\"", "\"", 2, notePrimaryKeyColumns),
 	)
-	values := []interface{}{related.MusicSheetID, o.NoteID}
+	values := []interface{}{related.MusicSheetID, o.Index, o.MusicSheetID}
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -630,7 +653,7 @@ func Notes(mods ...qm.QueryMod) noteQuery {
 
 // FindNote retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindNote(ctx context.Context, exec boil.ContextExecutor, noteID string, selectCols ...string) (*Note, error) {
+func FindNote(ctx context.Context, exec boil.ContextExecutor, index int, musicSheetID string, selectCols ...string) (*Note, error) {
 	noteObj := &Note{}
 
 	sel := "*"
@@ -638,10 +661,10 @@ func FindNote(ctx context.Context, exec boil.ContextExecutor, noteID string, sel
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"notes\" where \"note_id\"=$1", sel,
+		"select %s from \"notes\" where \"index\"=$1 AND \"music_sheet_id\"=$2", sel,
 	)
 
-	q := queries.Raw(query, noteID)
+	q := queries.Raw(query, index, musicSheetID)
 
 	err := q.Bind(ctx, exec, noteObj)
 	if err != nil {
@@ -1023,7 +1046,7 @@ func (o *Note) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, er
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), notePrimaryKeyMapping)
-	sql := "DELETE FROM \"notes\" WHERE \"note_id\"=$1"
+	sql := "DELETE FROM \"notes\" WHERE \"index\"=$1 AND \"music_sheet_id\"=$2"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1120,7 +1143,7 @@ func (o NoteSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *Note) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindNote(ctx, exec, o.NoteID)
+	ret, err := FindNote(ctx, exec, o.Index, o.MusicSheetID)
 	if err != nil {
 		return err
 	}
@@ -1159,16 +1182,16 @@ func (o *NoteSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) er
 }
 
 // NoteExists checks if the Note row exists.
-func NoteExists(ctx context.Context, exec boil.ContextExecutor, noteID string) (bool, error) {
+func NoteExists(ctx context.Context, exec boil.ContextExecutor, index int, musicSheetID string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"notes\" where \"note_id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"notes\" where \"index\"=$1 AND \"music_sheet_id\"=$2 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
 		fmt.Fprintln(writer, sql)
-		fmt.Fprintln(writer, noteID)
+		fmt.Fprintln(writer, index, musicSheetID)
 	}
-	row := exec.QueryRowContext(ctx, sql, noteID)
+	row := exec.QueryRowContext(ctx, sql, index, musicSheetID)
 
 	err := row.Scan(&exists)
 	if err != nil {
@@ -1180,7 +1203,7 @@ func NoteExists(ctx context.Context, exec boil.ContextExecutor, noteID string) (
 
 // Exists checks if the Note row exists.
 func (o *Note) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return NoteExists(ctx, exec, o.NoteID)
+	return NoteExists(ctx, exec, o.Index, o.MusicSheetID)
 }
 
 // /////////////////////////////// BEGIN EXTENSIONS /////////////////////////////////
