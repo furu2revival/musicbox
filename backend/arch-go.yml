@@ -1,0 +1,56 @@
+version: 1
+
+threshold:
+  compliance: 100
+  coverage: 0
+
+dependenciesRules:
+  - package: "github.com/furu2revival/musicbox/app/adapter.**"
+    shouldOnlyDependsOn:
+      internal:
+        - "github.com/furu2revival/musicbox/app/adapter"
+        - "github.com/furu2revival/musicbox/app/core"
+        - "github.com/furu2revival/musicbox/app/domain"
+        - "github.com/furu2revival/musicbox/app/infrastructure"
+        - "github.com/furu2revival/musicbox/app/usecase"
+        - "github.com/furu2revival/musicbox/pkg"
+        - "github.com/furu2revival/musicbox/protobuf"
+        - "github.com/furu2revival/musicbox/testutils"
+
+  - package: "github.com/furu2revival/musicbox/app/core.**"
+    shouldOnlyDependsOn:
+      internal:
+        - "github.com/furu2revival/musicbox/app/core"
+        - "github.com/furu2revival/musicbox/pkg"
+        - "github.com/furu2revival/musicbox/protobuf/config"
+      external:
+        - "github.com/google/uuid"
+        - "cloud.google.com/go/civil"
+        - "google.golang.org/protobuf"
+
+  - package: "github.com/furu2revival/musicbox/app/domain.**"
+    shouldOnlyDependsOn:
+      internal:
+        - "github.com/furu2revival/musicbox/app/core"
+        - "github.com/furu2revival/musicbox/app/domain"
+        - "github.com/furu2revival/musicbox/pkg"
+      external:
+        - "github.com/google/uuid"
+
+  - package: "github.com/furu2revival/musicbox/app/infrastructure.**"
+    shouldOnlyDependsOn:
+      internal:
+        - "github.com/furu2revival/musicbox/app/adapter/dao"
+        - "github.com/furu2revival/musicbox/app/core"
+        - "github.com/furu2revival/musicbox/app/domain"
+        - "github.com/furu2revival/musicbox/app/infrastructure"
+        - "github.com/furu2revival/musicbox/pkg"
+        - "github.com/furu2revival/musicbox/protobuf"
+
+  - package: "github.com/furu2revival/musicbox/app/usecase.**"
+    shouldOnlyDependsOn:
+      internal:
+        - "github.com/furu2revival/musicbox/app/core"
+        - "github.com/furu2revival/musicbox/app/domain"
+        - "github.com/furu2revival/musicbox/app/usecase"
+        - "github.com/furu2revival/musicbox/pkg"
