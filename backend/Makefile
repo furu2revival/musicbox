@@ -33,6 +33,13 @@ codegen:
 	buf generate
 	sqlboiler psql --wipe --templates=templates/sqlboiler,$(shell go env GOPATH)/pkg/mod/github.com/volatiletech/sqlboiler/v4@${SQL_BOILER_VERSION}/templates/main
 
+.PHONY: codegen-apiclient
+codegen-apiclient:
+	cd ../frontend && \
+		find . -type f \( -name '*_connect.ts' -or -name '*_pb.ts' \) -delete && \
+		npx buf generate ../backend/schema/protobuf --template buf.gen.yaml && \
+		npm run format
+
 .PHONY: test
 test:
 	mkdir -p tmp/coverage
