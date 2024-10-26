@@ -20,9 +20,10 @@ CREATE TABLE "music_sheets"
 -- notes テーブルを作成
 CREATE TABLE "notes"
 (
-    "note_id"        UUID PRIMARY KEY,
+    "index"          INT NOT NULL,
     "music_sheet_id" UUID NOT NULL REFERENCES "music_sheets"("music_sheet_id") ON DELETE CASCADE,
     "pitches"        INT[] NOT NULL,
     "created_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "updated_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("index", "music_sheet_id")
 );
