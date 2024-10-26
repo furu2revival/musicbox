@@ -10,6 +10,7 @@ import (
 	"context"
 	"github.com/furu2revival/musicbox/app/adapter/handler"
 	"github.com/furu2revival/musicbox/app/adapter/handler/debug/echo_handler"
+	"github.com/furu2revival/musicbox/app/adapter/handler/music_sheet_handler"
 	"github.com/furu2revival/musicbox/app/adapter/repoimpl"
 	"github.com/furu2revival/musicbox/app/adapter/repoimpl/echo_repoimpl"
 	"github.com/furu2revival/musicbox/app/infrastructure/connect/aop"
@@ -23,15 +24,16 @@ import (
 // Injectors from wire.go:
 
 func InitializeAPIServerMux(ctx context.Context) (*http.ServeMux, error) {
+	proxy := aop.NewProxy()
+	musicSheetServiceHandler := music_sheet_handler.NewHandler(proxy)
 	connection, err := db.NewConnection()
 	if err != nil {
 		return nil, err
 	}
 	echoRepository := echo_repoimpl.NewRepository()
 	usecase := echo_usecase.NewUsecase(connection, echoRepository)
-	proxy := aop.NewProxy()
 	echoServiceHandler := echo_handler.NewHandler(usecase, proxy)
-	serveMux := handler.New(echoServiceHandler)
+	serveMux := handler.New(musicSheetServiceHandler, echoServiceHandler)
 	return serveMux, nil
 }
 
