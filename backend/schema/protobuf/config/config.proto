@@ -1,4 +1,5 @@
 syntax = "proto3";
+package config;
 
 message Config {
   bool debug = 1;

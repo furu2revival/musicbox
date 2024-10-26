@@ -1,0 +1,86 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+
+      - name: setup database
+        working-directory: ./backend
+        run: |
+          docker compose up -d
+
+      - name: test
+        working-directory: ./backend
+        run: |
+          make test
+
+  code-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+      - uses: actions/cache@v4
+        id: cache-makefile
+        with:
+          path: ~/go/bin
+          key: ${{ runner.os }}-makefile-${{ hashFiles('backend/Makefile') }}-${{ hashFiles('cmd') }}-${{ hashFiles('go.mod') }}
+
+      - name: setup database
+        working-directory: ./backend
+        run: |
+          docker compose up -d
+
+      - name: dependencies
+        if: steps.cache-makefile.outputs.cache-hit != 'true'
+        working-directory: ./backend
+        run: |
+          make install-tools
+
+      - name: lint
+        working-directory: ./backend
+        run: |
+          make lint
+
+      - name: codegen nodiff
+        working-directory: ./backend
+        run: |
+          make codegen
+          test -z "$(git status --porcelain)" || (git status; git diff; exit 1)
+
+      - name: format nodiff
+        working-directory: ./backend
+        run: |
+          make format
+          test -z "$(git status --porcelain)" || (git status; git diff; exit 1)
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+
+      - name: build
+        working-directory: ./backend
+        run: |
+          make build

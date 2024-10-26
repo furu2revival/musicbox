@@ -2,7 +2,6 @@ syntax = "proto3";
 package api;
 
 import "custom_option/custom_option.proto";
-import "google/protobuf/timestamp.proto";
 
 service MusicSheetService {
   rpc GetV1(MusicSheetServiceGetV1Request) returns (MusicSheetServiceGetV1Response) {
