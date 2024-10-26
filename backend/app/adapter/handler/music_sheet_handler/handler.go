@@ -3,32 +3,62 @@ package music_sheet_handler
 import (
 	"context"
 
+	"github.com/furu2revival/musicbox/app/adapter/pbconv"
+	"github.com/furu2revival/musicbox/app/domain/model"
+	"github.com/furu2revival/musicbox/app/domain/repository"
 	"github.com/furu2revival/musicbox/app/infrastructure/connect/aop"
+	"github.com/furu2revival/musicbox/app/usecase/music_sheet_usecase"
 	"github.com/furu2revival/musicbox/protobuf/api"
 	"github.com/furu2revival/musicbox/protobuf/api/apiconnect"
+	"github.com/google/uuid"
 )
 
 type handler struct {
+	uc *music_sheet_usecase.Usecase
 }
 
-func NewHandler(proxy aop.Proxy) apiconnect.MusicSheetServiceHandler {
-	return api.NewMusicSheetServiceHandler(&handler{}, proxy)
+func NewHandler(uc *music_sheet_usecase.Usecase, proxy aop.Proxy) apiconnect.MusicSheetServiceHandler {
+	return api.NewMusicSheetServiceHandler(&handler{uc}, proxy)
 }
 
 func (h handler) GetV1(ctx context.Context, req *aop.Request[*api.MusicSheetServiceGetV1Request]) (*api.MusicSheetServiceGetV1Response, error) {
-	// TODO: implement me
-	return &api.MusicSheetServiceGetV1Response{}, nil
+	// TODO: #12 実装する
+	return &api.MusicSheetServiceGetV1Response{
+		MusicSheet: &api.MusicSheet{
+			MusicSheetId: uuid.NewString(),
+			Title:        "dummy",
+			Notes: []*api.Note{
+				{
+					Pitches: []api.Pitch{
+						api.Pitch_PITCH_C3,
+						api.Pitch_PITCH_D3,
+					},
+				},
+				{
+					Pitches: []api.Pitch{
+						api.Pitch_PITCH_C3,
+						api.Pitch_PITCH_D3,
+					},
+				},
+			},
+		},
+	}, nil
 }
 
 func (h handler) GetV1Errors(errs *api.MusicSheetServiceGetV1Errors) {
-	// TODO: implement me
+	errs.Map(repository.ErrMusicSheetNotFound, errs.RESOURCE_NOT_FOUND)
 }
 
 func (h handler) CreateV1(ctx context.Context, req *aop.Request[*api.MusicSheetServiceCreateV1Request]) (*api.MusicSheetServiceCreateV1Response, error) {
-	// TODO: implement me
-	return &api.MusicSheetServiceCreateV1Response{}, nil
+	result, err := h.uc.Create(ctx, req.RequestContext(), req.Msg().GetTitle(), pbconv.FromNotePbs(req.Msg().GetNotes()))
+	if err != nil {
+		return nil, err
+	}
+	return &api.MusicSheetServiceCreateV1Response{
+		MusicSheetId: result.ID.String(),
+	}, nil
 }
 
 func (h handler) CreateV1Errors(errs *api.MusicSheetServiceCreateV1Errors) {
-	// TODO: implement me
+	errs.Map(model.ErrMusicTitleInvalid, errs.ILLEGAL_ARGUMENT)
 }
