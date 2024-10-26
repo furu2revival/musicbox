@@ -46,5 +46,16 @@
 			"semicolons": "always",
 			"trailingCommas": "es5"
 		}
-	}
+	},
+	"overrides": [
+		{
+			"include": ["tsconfig.*.json"],
+			"json": {
+				"parser": {
+					"allowComments": true,
+					"allowTrailingCommas": true
+				}
+			}
+		}
+	]
 }
