@@ -21,7 +21,7 @@ func NewHandler(uc *music_sheet_usecase.Usecase, proxy aop.Proxy) apiconnect.Mus
 }
 
 func (h handler) GetV1(ctx context.Context, req *aop.Request[*api.MusicSheetServiceGetV1Request]) (*api.MusicSheetServiceGetV1Response, error) {
-	result, err := h.uc.Get(ctx, req.RequestContext())
+	result, err := h.uc.Get(ctx, req.RequestContext(), req.Msg().GetMusicSheetId())
 	if err != nil {
 		return nil, err
 	}
