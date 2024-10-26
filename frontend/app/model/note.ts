@@ -1,6 +1,4 @@
-// 0: unspecified
-// 1: C3, 2: D3, ...
-export type Pitch = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type Pitch = "C3" | "D3" | "E3" | "F3" | "G3" | "A4" | "B4" | "C4";
 
 export type Note = {
 	pitch: Pitch[];
