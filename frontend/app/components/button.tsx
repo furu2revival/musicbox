@@ -1,7 +1,5 @@
-import style from "./button.module.css"
+import style from "./button.module.css";
 
 export default function MyButton() {
-  return (
-    <div className={style.root}>button</div>
-  )
+	return <div className={style.root}>button</div>;
 }
