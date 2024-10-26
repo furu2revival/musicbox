@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": ["build/**/*"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -20,14 +20,31 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"correctness": {
+				"noEmptyCharacterClassInRegex": "error",
+				"noUndeclaredVariables": "error",
+				"noUnusedVariables": "warn",
+				"useHookAtTopLevel": "error"
+			},
+			"complexity": {
+				"useArrowFunction": "off"
+			},
 			"style": {
-				"noParameterAssign": "off"
+				"noParameterAssign": "off",
+				"noNamespace": "error",
+				"noUselessElse": "off"
+			},
+			"suspicious": {
+				"noMisleadingInstantiator": "error"
 			}
 		}
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+			"arrowParentheses": "always",
+			"quoteStyle": "double",
+			"semicolons": "always",
+			"trailingCommas": "es5"
 		}
 	}
 }
