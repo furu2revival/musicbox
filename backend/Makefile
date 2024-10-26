@@ -35,7 +35,7 @@ codegen:
 
 .PHONY: codegen-apiclient
 codegen-apiclient:
-	cd ../frontend && \
+	cd ../pureFrontend && \
 		find . -type f \( -name '*_connect.ts' -or -name '*_pb.ts' \) -delete && \
 		npx buf generate ../backend/schema/protobuf --template buf.gen.yaml && \
 		npm run format
