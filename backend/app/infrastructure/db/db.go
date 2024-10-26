@@ -40,12 +40,13 @@ func NewConnection() (transaction.Connection, error) {
 // Connection は規定量のコネクションプールを保有するため、複数作成されないよう singleton を返す NewConnection を公開している。
 func open() (Connection, error) {
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=UTC",
+		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=UTC",
 		config.Get().GetPostgres().GetHost(),
 		config.Get().GetPostgres().GetUser(),
 		config.Get().GetPostgres().GetPassword(),
 		config.Get().GetPostgres().GetDatabase(),
 		config.Get().GetPostgres().GetPort(),
+		config.Get().GetPostgres().GetSslmode(),
 	)
 	db, err := otelsql.Open("postgres", dsn, otelsql.WithAttributes(semconv.DBSystemPostgreSQL))
 	if err != nil {

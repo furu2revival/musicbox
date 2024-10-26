@@ -43,6 +43,7 @@ message Postgres {
   string user = 3;
   string password = 4;
   string database = 5;
+  string sslmode = 6;
 }
 
 message APIServer {

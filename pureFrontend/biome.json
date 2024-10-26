@@ -1,0 +1,61 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": ["build/**/*"]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noEmptyCharacterClassInRegex": "error",
+				"noUndeclaredVariables": "error",
+				"noUnusedVariables": "warn",
+				"useHookAtTopLevel": "error"
+			},
+			"complexity": {
+				"useArrowFunction": "off"
+			},
+			"style": {
+				"noParameterAssign": "off",
+				"noNamespace": "error",
+				"noUselessElse": "off"
+			},
+			"suspicious": {
+				"noMisleadingInstantiator": "error"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "always",
+			"quoteStyle": "double",
+			"semicolons": "always",
+			"trailingCommas": "es5"
+		}
+	},
+	"overrides": [
+		{
+			"include": ["tsconfig.*.json"],
+			"json": {
+				"parser": {
+					"allowComments": true,
+					"allowTrailingCommas": true
+				}
+			}
+		}
+	]
+}

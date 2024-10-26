@@ -14,7 +14,8 @@
     "port": 5432,
     "user": "db",
     "password": "db",
-    "database": "db"
+    "database": "db",
+    "sslmode": "disable"
   },
   "api_server": {
     "port": 8000,
