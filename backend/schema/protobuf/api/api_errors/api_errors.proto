@@ -29,7 +29,7 @@ message ErrorCode {
 
   enum Method {
     reserved 1 to 1999;
-    reserved 3000 to max;
+    reserved 4000 to max;
 
     METHOD_UNSPECIFIED = 0;
 
