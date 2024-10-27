@@ -1,7 +1,7 @@
 import type { MusicSheet } from "~/model/musicSheet";
 import type { Pitch } from "~/model/note";
 import {
-	AudioContextPlayer,
+	type AudioContextPlayer,
 	createAudioContextPlayer,
 } from "./audioContextPlayer";
 
