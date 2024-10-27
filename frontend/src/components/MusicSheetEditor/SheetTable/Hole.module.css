@@ -1,7 +1,7 @@
 .hole {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background-color: rgb(53, 29, 10); /* 穴の色を指定 */
-  border-radius: 50%; /* 丸い形にする */
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-color: rgb(53, 29, 10); /* 穴の色を指定 */
+	border-radius: 50%; /* 丸い形にする */
 }
