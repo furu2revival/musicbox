@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useMusicBox } from "~/hooks/furu2Musicbox";
 import { usePostMusicSheet } from "~/hooks/usePostMusicSheet";
 import type { MusicSheet } from "~/model/musicSheet";
 import { type Note, NoteToResponse } from "~/model/note";
 import { MusicBox } from "./MusicBox";
 import { SheetTable } from "./SheetTable";
 import style from "./style.module.css";
-import { useMusicBox } from "~/hooks/furu2Musicbox";
 
 type Props = {
 	className?: string;
@@ -44,6 +44,9 @@ export const MusicSheetEditor = ({
 		<>
 			<div className={`${style.root} ${className ?? ""}`}>
 				<MusicBox
+					onStart={musicBox.play}
+					onStop={musicBox.stop}
+					onLoad={musicBox.load}
 					energy={musicBox.energy}
 					onReset={async () => {
 						setNotes(notesInit);
@@ -67,14 +70,17 @@ export const MusicSheetEditor = ({
 							navigator.clipboard
 								.writeText(url)
 								.then(() =>
-									alert(`URLがクリップボードにコピーされました: ${url}`)
+									alert(`URLがクリップボードにコピーされました: ${url}`),
 								)
 								.catch((err) =>
-									console.error("クリップボードへのコピーに失敗しました: ", err)
+									console.error(
+										"クリップボードへのコピーに失敗しました: ",
+										err,
+									),
 								);
 					}}
 					isCharge={true}
-          shareDisabled={notes.every((note) => note.pitch.length === 0)}
+					shareDisabled={notes.every((note) => note.pitch.length === 0)}
 				/>
 				<SheetTable
 					notes={notes}
@@ -89,17 +95,12 @@ export const MusicSheetEditor = ({
 					}}
 				/>
 			</div>
-			<div>
+			{/* <div>
 				<div>ready: {musicBox.ready.toString()}</div>
 				<div>
 					energy: {musicBox.energy} / {musicBox.maxEnergy}
 				</div>
-				<div>
-					<button onClick={() => musicBox.load()}>load</button>
-					<button onClick={() => musicBox.play()}>play</button>
-					<button onClick={() => musicBox.stop()}>stop</button>
-				</div>
-			</div>
+			</div> */}
 		</>
 	);
 };
