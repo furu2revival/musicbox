@@ -4,6 +4,7 @@ import resetSound from "~/assets/reset.mp3";
 import share from "~/assets/share.png";
 import stopIcon from "~/assets/stop.png";
 import trashCan from "~/assets/trash_can.png";
+import propeller from "~/assets/propeller.png";
 import style from "./style.module.css";
 
 type Props = {
@@ -43,7 +44,13 @@ export const MusicBox = ({
 				}}
 				className={`${isCharge ? style.rotate : ""}`}
 			>
-				ぷ
+			<button
+					className={style.iconButton}
+					type="button"
+					disabled
+			>
+				<img width={32} src={propeller} alt="" />
+			</button>
 			</div>
 			<button
 				className={style.iconButton}
