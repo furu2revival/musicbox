@@ -11,18 +11,19 @@ CREATE TABLE "echos"
 -- music_sheets テーブルを作成
 CREATE TABLE "music_sheets"
 (
-    "music_sheet_id" UUID PRIMARY KEY,
-    "title"          VARCHAR(100) NOT NULL,
-    "created_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "music_sheet_id"  UUID PRIMARY KEY,
+    "title"           VARCHAR(100) NOT NULL,
+    "number_of_notes" INT          NOT NULL,
+    "created_at"      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at"      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- notes テーブルを作成
 CREATE TABLE "notes"
 (
-    "index"          INT NOT NULL,
-    "music_sheet_id" UUID NOT NULL REFERENCES "music_sheets"("music_sheet_id") ON DELETE CASCADE,
-    "pitches"        INT[] NOT NULL,
+    "index"          INT       NOT NULL,
+    "music_sheet_id" UUID      NOT NULL REFERENCES "music_sheets" ("music_sheet_id") ON DELETE CASCADE,
+    "pitches"        INT[]     NOT NULL,
     "created_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("index", "music_sheet_id")
