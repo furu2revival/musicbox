@@ -14,16 +14,19 @@ const loadAudio = function (src: string): Promise<HTMLAudioElement> {
 export class PooledAudioPlayer extends EventTarget {
 	private audio: HTMLAudioElement[] = [];
 	private index = 0;
+	soundFile: string;
+	poolSize: number;
 
 	constructor(soundFile: string, poolSize: number) {
 		super();
 
-		this.load(soundFile, poolSize);
+		this.soundFile = soundFile;
+		this.poolSize = poolSize;
 	}
 
-	private async load(src: string, count: number) {
+	async load() {
 		this.audio = await Promise.all(
-			Array.from({ length: count }).map(() => loadAudio(src))
+			Array.from({ length: this.poolSize }).map(() => loadAudio(this.soundFile))
 		);
 		this.dispatchEvent(new Event("load"));
 	}
@@ -54,5 +57,6 @@ export const createPooledAudioPlayer = function (
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
+		player.load();
 	});
 };
