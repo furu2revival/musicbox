@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import playIcon from "~/assets/play.png";
+import propeller from "~/assets/propeller.png";
 import resetSound from "~/assets/reset.mp3";
 import share from "~/assets/share.png";
 import stopIcon from "~/assets/stop.png";
 import trashCan from "~/assets/trash_can.png";
-import propeller from "~/assets/propeller.png";
 import style from "./style.module.css";
 
 type Props = {
@@ -32,6 +32,7 @@ export const MusicBox = ({
 }: Props) => {
 	const resetAudio = useMemo(() => new Audio(resetSound), []);
 	const shakeIntensity = energy * 0.1;
+	const [playStop, setPlayStop] = useState<"play" | "stop">("stop");
 	return (
 		<div className={`${style.root} ${className}`}>
 			<button
@@ -50,13 +51,9 @@ export const MusicBox = ({
 				}}
 				className={`${isCharge ? style.rotate : ""}`}
 			>
-			<button
-					className={style.iconButton}
-					type="button"
-					disabled
-			>
-				<img width={32} src={propeller} alt="" />
-			</button>
+				<button className={style.iconButton} type="button" disabled>
+					<img width={32} src={propeller} alt="" />
+				</button>
 			</div>
 			<button
 				className={style.iconButton}
@@ -71,20 +68,30 @@ export const MusicBox = ({
 				<img width={32} src={trashCan} alt="" />
 			</button>
 
-			<button
-				className={style.iconButton}
-				onClick={() => onStart()}
-				type="button"
-			>
-				<img src={playIcon} alt="再生" width={32} />
-			</button>
-			<button
-				onClick={() => onStop()}
-				className={style.iconButton}
-				type="button"
-			>
-				<img src={stopIcon} alt="ストップ" height={32} />
-			</button>
+			{playStop === "stop" && (
+				<button
+					className={style.iconButton}
+					onClick={() => {
+						setPlayStop("play");
+						onStart();
+					}}
+					type="button"
+				>
+					<img src={playIcon} alt="再生" width={32} />
+				</button>
+			)}
+			{playStop === "play" && (
+				<button
+					onClick={() => {
+						setPlayStop("stop");
+						onStop();
+					}}
+					className={style.iconButton}
+					type="button"
+				>
+					<img src={stopIcon} alt="ストップ" height={32} />
+				</button>
+			)}
 			<button onClick={() => onLoad()} type="button">
 				load
 			</button>
