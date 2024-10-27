@@ -8,18 +8,18 @@ interface ShakeDetectorInit {
 	 * 0~1程度の加速度は殆ど動かさなくても発生するため、2以上の加速度のみを対象とする
 	 */
 	accelerationThreshold: number;
-  /**
-   * シェイクの移動量の合計値がこの値を超えた場合にshakeイベントを発火する
-   */
-  moveAmountThreshold: number;
+	/**
+	 * シェイクの移動量の合計値がこの値を超えた場合にshakeイベントを発火する
+	 */
+	moveAmountThreshold: number;
 }
 
 export class ShakeDetector extends EventTarget {
-  private _currentTotalMoveAmount: number;
+	private _currentTotalMoveAmount: number;
 	private _currentMoveAmount: number;
 	private readonly _shakeDetectInterval: number;
 	private readonly _accelerationThreshold: number;
-  private readonly _moveAmountThreshold: number;
+	private readonly _moveAmountThreshold: number;
 	private _lastTime: number = new Date().getTime();
 
 	/**
@@ -33,14 +33,14 @@ export class ShakeDetector extends EventTarget {
 		init: ShakeDetectorInit = {
 			shakeDetectInterval: 100,
 			accelerationThreshold: 5,
-      moveAmountThreshold: 1,
+			moveAmountThreshold: 1,
 		}
 	) {
 		super();
 		this._shakeDetectInterval = init.shakeDetectInterval;
 		this._accelerationThreshold = init.accelerationThreshold;
-    this._moveAmountThreshold = init.moveAmountThreshold
-    this._currentTotalMoveAmount = 0;
+		this._moveAmountThreshold = init.moveAmountThreshold;
+		this._currentTotalMoveAmount = 0;
 		this._currentMoveAmount = 0;
 	}
 
@@ -92,20 +92,20 @@ export class ShakeDetector extends EventTarget {
 
 		const moveAmount = this._calculateMoveAmount(event, deltaTime);
 		this._currentMoveAmount = moveAmount;
-    this._currentTotalMoveAmount += moveAmount;
+		this._currentTotalMoveAmount += moveAmount;
 
-    this._dispatchShakeEvent();
+		this._dispatchShakeEvent();
 
 		this._lastTime = currentTime;
 		this.dispatchEvent(new Event("move"));
 	};
 
-  private _dispatchShakeEvent = () => {
-    if(this._currentTotalMoveAmount >= this._moveAmountThreshold){
-      this.dispatchEvent(new Event("shake"));
-      this._currentTotalMoveAmount = 0;
-    }
-  }
+	private _dispatchShakeEvent = () => {
+		if (this._currentTotalMoveAmount >= this._moveAmountThreshold) {
+			this.dispatchEvent(new Event("shake"));
+			this._currentTotalMoveAmount = 0;
+		}
+	};
 
 	private _calculateMoveAmount = (
 		event: DeviceMotionEvent,
