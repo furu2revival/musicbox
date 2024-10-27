@@ -1,7 +1,0 @@
-.root {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	background-color: brown;
-	padding: 1rem;
-}
