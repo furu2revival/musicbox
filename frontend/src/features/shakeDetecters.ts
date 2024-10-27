@@ -136,12 +136,14 @@ export class ShakeDetector extends EventTarget {
 	};
 }
 
-export const createShakeDetector = function(init: ShakeDetectorInit): Promise<ShakeDetector> {
-  return new Promise((resolve) => {
-    const detector = new ShakeDetector(init);
-    detector.addEventListener("load", () => {
-      resolve(detector);
-    });
-    detector.enableShakeDetector();
-  });
-}
+export const createShakeDetector = function (
+	init: ShakeDetectorInit
+): Promise<ShakeDetector> {
+	return new Promise((resolve) => {
+		const detector = new ShakeDetector(init);
+		detector.addEventListener("load", () => {
+			resolve(detector);
+		});
+		detector.enableShakeDetector();
+	});
+};

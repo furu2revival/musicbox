@@ -1,7 +1,7 @@
 export class PeriodicAudioPlayer extends EventTarget {
 	audio: HTMLAudioElement;
 	startTime: number;
-  private playing = false;
+	private playing = false;
 
 	constructor(src: string, startTime = 0) {
 		super();
@@ -18,15 +18,15 @@ export class PeriodicAudioPlayer extends EventTarget {
 	}
 
 	play(interval: number, times: number) {
-    if(this.playing) return;
-    this.playing = true;
+		if (this.playing) return;
+		this.playing = true;
 		let count = 0;
 
 		const intervalId = setInterval(() => {
 			count += 1;
 			if (count > times) {
 				clearInterval(intervalId);
-        this.playing = false;
+				this.playing = false;
 				return;
 			}
 
