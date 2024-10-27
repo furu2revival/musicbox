@@ -1,8 +1,8 @@
 import type { MusicSheet } from "~/model/musicSheet";
 import type { Pitch } from "~/model/note";
 import {
+	type PooledAudioPlayer,
 	createPooledAudioPlayer,
-	PooledAudioPlayer,
 } from "./pooledAudioPlayer";
 
 import soundFileA4 from "~/assets/A4.mp3";
@@ -68,9 +68,9 @@ export class MusicSheetPlayer extends EventTarget {
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
 				this.audioPlayers[pitch as Pitch] = await createPooledAudioPlayer(
 					file,
-					poolSize
+					poolSize,
 				);
-			})
+			}),
 		);
 		this.dispatchEvent(new Event("load"));
 	}
@@ -107,13 +107,12 @@ export class MusicSheetPlayer extends EventTarget {
 	}
 }
 
-export const createMusicSheetPlayer = async function (
-	init: MusicSheetPlayerInit
-): Promise<MusicSheetPlayer> {
-	return new Promise((resolve) => {
+export const createMusicSheetPlayer = async (
+	init: MusicSheetPlayerInit,
+): Promise<MusicSheetPlayer> =>
+	new Promise((resolve) => {
 		const player = new MusicSheetPlayer(init);
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
 	});
-};

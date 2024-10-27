@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import {
+	type MusicSheetPlayer,
+	type MusicSheetPlayerInit,
 	createMusicSheetPlayer,
-	MusicSheetPlayerInit,
-	MusicSheetPlayer,
 } from "./musicSheetPlayer";
 
-export const useMusicSheetPlayer = function (init: MusicSheetPlayerInit) {
+export const useMusicSheetPlayer = (init: MusicSheetPlayerInit) => {
 	const [player, setPlayer] = useState<MusicSheetPlayer | null>(null);
 	const [energy, setEnergy] = useState<number>(0);
 

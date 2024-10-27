@@ -9,12 +9,14 @@ type Props = {
 	className?: string;
 	maxNotes: number;
 	musicSheet: MusicSheet | undefined;
+	energy: number;
 };
 
 export const MusicSheetEditor = ({
 	className,
 	maxNotes,
 	musicSheet,
+	energy,
 }: Props) => {
 	const notesInit = Array(maxNotes).fill({ pitch: [] });
 	const [notes, setNotes] = useState<Note[]>(musicSheet?.notes ?? notesInit);
@@ -22,6 +24,7 @@ export const MusicSheetEditor = ({
 	return (
 		<div className={`${style.root} ${className ?? ""}`}>
 			<MusicBox
+				energy={energy}
 				onReset={() => setNotes(notesInit)}
 				onShare={async () => {
 					const postNotes = () => {
@@ -46,6 +49,7 @@ export const MusicSheetEditor = ({
 								console.error("クリップボードへのコピーに失敗しました: ", err),
 							);
 				}}
+				isCharge={true}
 			/>
 			<SheetTable
 				notes={notes}
