@@ -47,8 +47,10 @@ export const MusicBox = ({
 				className={style.deleteButton}
 				type="button"
 				onClick={() => {
-					resetAudio.play();
-					onReset();
+					if (window.confirm("譜面をリセットしますか？")) {
+						resetAudio.play();
+						onReset();
+					}
 				}}
 			>
 				<img width={32} src={trashCan} alt="" />
