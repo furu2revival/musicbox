@@ -15,6 +15,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
@@ -32,13 +33,10 @@ func (r Repository) Get(ctx context.Context, tx transaction.Transaction, id uuid
 		}
 		return model.MusicSheet{}, err
 	}
-	notes, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID)).All(ctx, tx)
+	notes, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID), qm.OrderBy("Index")).All(ctx, tx)
 	if err != nil {
 		return model.MusicSheet{}, err
 	}
-	sort.SliceStable(notes, func(i, j int) bool {
-        return notes[i].Index < notes[j].Index
-    })
 	return model.NewMusicSheet(uuid.MustParse(musicSheet.MusicSheetID), musicSheet.Title, vector.Map(notes, func(note *dao.Note) model.Note {
 		return model.NewNote(vector.Map(note.Pitches, func(pitch int64) model.Pitch {
 			return model.Pitch(pitch)
