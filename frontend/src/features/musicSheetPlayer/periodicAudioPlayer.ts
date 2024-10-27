@@ -22,6 +22,7 @@ export class PeriodicAudioPlayer extends EventTarget {
 		this.audio.addEventListener("error", () => {
 			this.dispatchEvent(new Event("error"));
 		});
+		this.dispatchEvent(new Event("load"));
 	}
 
 	play(interval: number, times: number) {
