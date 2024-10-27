@@ -8,7 +8,7 @@ export type MusicSheet = {
 };
 
 export const MusicSheetFromResponse = (
-	musicSheet: ResponseMusicSheet,
+	musicSheet: ResponseMusicSheet
 ): MusicSheet => {
 	return {
 		id: musicSheet.musicSheetId,

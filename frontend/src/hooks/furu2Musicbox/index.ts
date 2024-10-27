@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
+import type {
 	MusicSheetPlayer,
 	MusicSheetPlayerInit,
 } from "~/features/musicSheetPlayer/musicSheetPlayer";
@@ -8,16 +8,19 @@ import { createMusicSheetPlayer } from "~/features/musicSheetPlayer/musicSheetPl
 import type { PeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 import { createPeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 import type { ShakeDetectorInit } from "~/features/shakeDetecters";
-import { createShakeDetector, ShakeDetector } from "~/features/shakeDetecters";
+import {
+	type ShakeDetector,
+	createShakeDetector,
+} from "~/features/shakeDetecters";
 
 import windSprintSound from "~/assets/wind_spring.wav";
 
-type Furu2MusicPlayerInit = {
+type UseMusicBoxInit = {
 	playerInit: MusicSheetPlayerInit;
 	shakeDetectorInit: ShakeDetectorInit;
 };
 
-export const useMusicBox = function (init: Furu2MusicPlayerInit) {
+export const useMusicBox = function (init: UseMusicBoxInit) {
 	const [player, setPlayer] = useState<MusicSheetPlayer | null>(null);
 	const [windPlayer, setWindPlayer] = useState<PeriodicAudioPlayer | null>(
 		null
@@ -65,7 +68,7 @@ export const useMusicBox = function (init: Furu2MusicPlayerInit) {
 				windPlayer?.play(500, 3);
 			}
 
-			player?.setEnergy(energy + 1);
+			player.energy = energy + 1;
 		};
 
 		shakeDetector?.addEventListener("shake", handleShake);
@@ -73,7 +76,12 @@ export const useMusicBox = function (init: Furu2MusicPlayerInit) {
 		return () => {
 			shakeDetector?.removeEventListener("shake", handleShake);
 		};
-	}, [player, shakeDetector]);
+	}, [player, windPlayer, shakeDetector]);
+
+	useEffect(() => {
+		if (!player) return;
+		player.musicSheet = init.playerInit.musicSheet;
+	}, [init.playerInit.musicSheet]);
 
 	useEffect(() => {
 		if (!player) return;
@@ -83,6 +91,7 @@ export const useMusicBox = function (init: Furu2MusicPlayerInit) {
 			setMaxEnergy(player.maxEnergy);
 		};
 		player.addEventListener("energychange", handleEnergyChange);
+
 		return () => {
 			player.removeEventListener("energychange", handleEnergyChange);
 		};

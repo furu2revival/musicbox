@@ -20,7 +20,7 @@ function App() {
 			musicSheet={
 				data?.musicSheet ? MusicSheetFromResponse(data.musicSheet) : undefined
 			}
-			energy={20}
+			maxEnergy={100}
 		/>
 	);
 }

@@ -5,9 +5,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { queryClient } from "./queryClient.ts";
+import "./main.module.css";
 
 const finalTransport = createConnectTransport({
-	baseUrl: "http://43.207.202.40:8000",
+	baseUrl: "https://musicbox.averak.net",
 	// 開発期間は、binary ではなく JSON 形式を用いる。
 	// 理由: ブラウザの開発者ツールで human-readable なリクエスト/レスポンスメッセージを確認できるため。
 	useBinaryFormat: false,
@@ -21,5 +22,5 @@ createRoot(document.getElementById("root")!).render(
 				<App />
 			</QueryClientProvider>
 		</TransportProvider>
-	</StrictMode>,
+	</StrictMode>
 );

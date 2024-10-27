@@ -12,7 +12,7 @@ export const useMusicSheet = (id: string | null) => {
 	const { isLoading, isError, error, data } = useQuery(
 		getV1.useQuery({
 			musicSheetId: id,
-		}),
+		})
 	);
 	return {
 		isLoading,

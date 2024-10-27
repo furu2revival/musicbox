@@ -5,7 +5,11 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'frontend/**'
   pull_request:
+    paths:
+      - 'frontend/**'
 
 jobs:
   build:
