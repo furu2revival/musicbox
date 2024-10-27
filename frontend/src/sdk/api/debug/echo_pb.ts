@@ -11,7 +11,7 @@ import type {
 	PartialMessage,
 	PlainMessage,
 } from "@bufbuild/protobuf";
-import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
+import { Message, Timestamp, proto3 } from "@bufbuild/protobuf";
 
 /**
  * @generated from message api.debug.EchoServiceEchoV1Request

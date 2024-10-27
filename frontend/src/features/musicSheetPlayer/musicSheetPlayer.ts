@@ -33,7 +33,7 @@ export type MusicSheetPlayerInit = {
 
 export class MusicSheetPlayer extends EventTarget {
 	private audioPlayers: Record<Pitch, AudioContextPlayer>;
-	private musicSheet: MusicSheet;
+	musicSheet: MusicSheet;
 	/** Ability to play music (unit: beats) */
 	private _energy = 0;
 	private _maxEnergy: number;
@@ -45,13 +45,14 @@ export class MusicSheetPlayer extends EventTarget {
 	get energy() {
 		return this._energy;
 	}
-	get maxEnergy() {
-		return this._maxEnergy;
+	set energy(value: number) {
+		console.log(this._maxEnergy);
+		this._energy = Math.min(value, this.maxEnergy);
+		this.dispatchEvent(new Event("energychange"));
 	}
 
-	set energy(value: number) {
-		this._energy = value;
-		this.dispatchEvent(new Event("energychange"));
+	get maxEnergy() {
+		return this._maxEnergy;
 	}
 
 	constructor(init: MusicSheetPlayerInit) {
@@ -70,7 +71,7 @@ export class MusicSheetPlayer extends EventTarget {
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
 				this.audioPlayers[pitch as Pitch] =
 					await createAudioContextPlayer(file);
-			}),
+			})
 		);
 		this.dispatchEvent(new Event("load"));
 	}
@@ -82,10 +83,6 @@ export class MusicSheetPlayer extends EventTarget {
 	stop() {
 		clearTimeout(this.timeout);
 		this.timeout = undefined;
-	}
-
-	setEnergy(energy: number) {
-		this.energy = Math.min(energy, this._maxEnergy);
 	}
 
 	private playNext() {
@@ -107,7 +104,7 @@ export class MusicSheetPlayer extends EventTarget {
 }
 
 export const createMusicSheetPlayer = async (
-	init: MusicSheetPlayerInit,
+	init: MusicSheetPlayerInit
 ): Promise<MusicSheetPlayer> =>
 	new Promise((resolve) => {
 		const player = new MusicSheetPlayer(init);
