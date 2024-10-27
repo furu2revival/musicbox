@@ -22,7 +22,7 @@ export class PeriodicAudioPlayer extends EventTarget {
 		this.audio.addEventListener("error", () => {
 			this.dispatchEvent(new Event("error"));
 		});
-    this.dispatchEvent(new Event("load"));
+		this.dispatchEvent(new Event("load"));
 	}
 
 	play(interval: number, times: number) {
@@ -53,7 +53,7 @@ export const createPeriodicAudioPlayer = function (
 	volume = 1
 ): Promise<PeriodicAudioPlayer> {
 	return new Promise((resolve, reject) => {
-    const player = new PeriodicAudioPlayer(src, startTime, volume);
+		const player = new PeriodicAudioPlayer(src, startTime, volume);
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
@@ -61,6 +61,5 @@ export const createPeriodicAudioPlayer = function (
 			reject(player);
 		});
 		player.load();
-    // resolve(player);
 	});
 };
