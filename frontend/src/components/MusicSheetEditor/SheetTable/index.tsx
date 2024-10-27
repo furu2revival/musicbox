@@ -5,7 +5,7 @@ import type { Note, Pitch } from "~/model/note";
 import { Hole } from "./Hole";
 import style from "./style.module.css";
 
-const PITCHES: Pitch[] = ["C3", "D3", "E3", "F3", "G3", "A4", "B4", "C4"];
+const PITCHES: Pitch[] = ["C4", "B4", "A4", "G3", "F3", "E3", "D3", "C3"];
 
 type Props = {
 	notes: Note[];

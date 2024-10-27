@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { usePostMusicSheet } from "~/hooks/usePostMusicSheet";
 import type { MusicSheet } from "~/model/musicSheet";
-import type { Note } from "~/model/note";
+import { type Note, NoteFromResponse, NoteToResponse } from "~/model/note";
 import { MusicBox } from "./MusicBox";
 import { SheetTable } from "./SheetTable";
 import style from "./style.module.css";
@@ -18,25 +19,30 @@ export const MusicSheetEditor = ({
 	musicSheet,
 	energy,
 }: Props) => {
-	const notesInit = Array(maxNotes).fill({ pitch: [] });
+	const notesInit: Note[] = Array(maxNotes).fill({ pitches: [] });
 	const [notes, setNotes] = useState<Note[]>(musicSheet?.notes ?? notesInit);
+	const { postMusicSheet } = usePostMusicSheet();
 
 	return (
 		<div className={`${style.root} ${className ?? ""}`}>
 			<MusicBox
 				energy={energy}
-				onReset={() => setNotes(notesInit)}
+				onReset={async () => {
+					setNotes(notesInit);
+				}}
 				onShare={async () => {
-					const postNotes = () => {
-						console.log(notes, "posted!");
-						return "id_id_id_id_id_id";
-					};
-					const noteId = postNotes();
-					const url = `https://example.com/notes/${noteId}`;
+					const noteId = (
+						await postMusicSheet({
+							notes: notes.map(NoteToResponse),
+							title: "テスト:将来的にこの値は変更されます",
+						})
+					).musicSheetId;
+					const url = `${new URL(window.location.href).origin}?musicSheetId=${noteId}`;
+
 					if (navigator.share)
 						await navigator.share({
-							title: "テスト",
-							text: "ほげ",
+							title: "ふるふるオルゴール",
+							text: "オルゴールオリジナル楽曲",
 							url,
 						});
 					else
