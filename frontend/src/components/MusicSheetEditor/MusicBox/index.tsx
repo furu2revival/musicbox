@@ -14,6 +14,9 @@ type Props = {
 	isCharge?: boolean;
 	shareDisabled: boolean;
 	energy: number;
+	onStart: () => void;
+	onStop: () => void;
+	onLoad: () => void;
 };
 
 export const MusicBox = ({
@@ -23,6 +26,9 @@ export const MusicBox = ({
 	isCharge,
 	shareDisabled,
 	energy,
+	onStart,
+	onStop,
+	onLoad,
 }: Props) => {
 	const resetAudio = useMemo(() => new Audio(resetSound), []);
 	const shakeIntensity = energy * 0.1;
@@ -67,18 +73,22 @@ export const MusicBox = ({
 
 			<button
 				className={style.iconButton}
-				onClick={() => console.log("start")}
+				onClick={() => onStart()}
 				type="button"
 			>
 				<img src={playIcon} alt="再生" width={32} />
 			</button>
 			<button
-				onClick={() => console.log("stop")}
+				onClick={() => onStop()}
 				className={style.iconButton}
 				type="button"
 			>
 				<img src={stopIcon} alt="ストップ" height={32} />
 			</button>
+			<button onClick={() => onLoad()} type="button">
+				load
+			</button>
+			{energy}
 		</div>
 	);
 };
