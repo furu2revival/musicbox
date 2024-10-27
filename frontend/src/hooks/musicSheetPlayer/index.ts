@@ -10,7 +10,7 @@ import { createPeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicA
 
 import windSprintSound from "~/assets/wind_spring.wav";
 
-export const useMusicSheetPlayer = function (init: MusicSheetPlayerInit) {
+export const useMusicSheetPlayer = (init: MusicSheetPlayerInit) => {
 	const [player, setPlayer] = useState<MusicSheetPlayer | null>(null);
 	const [windPlayer, setWindPlayer] = useState<PeriodicAudioPlayer | null>(
 		null
