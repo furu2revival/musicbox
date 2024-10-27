@@ -63,10 +63,9 @@ export class MusicSheetPlayer extends EventTarget {
 		this.noteInterval = (60 / init.beatsPerMinute) * 1000;
 
 		this.audioPlayers = {} as typeof this.audioPlayers;
-		this.load();
 	}
 
-	private async load() {
+	async load() {
 		await Promise.all(
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
 				this.audioPlayers[pitch as Pitch] =
@@ -111,4 +110,5 @@ export const createMusicSheetPlayer = async (
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
+		player.load();
 	});
