@@ -4,8 +4,10 @@
 	justify-content: space-between;
 	background-color: rgb(184, 109, 75);
 	padding: 1rem;
+	position:fixed;
+	height:80vh
 }
-.shareButton {
+.iconButton {
 	background-color: rgb(184, 109, 75);
 	color: white;
 	border: none;
@@ -23,14 +25,6 @@
 	cursor: not-allowed;
 }
 
-.deleteButton {
-	background-color: rgb(184, 109, 75);
-	color: white;
-	border: none;
-	border-radius: 5px;
-	padding: 0.5rem;
-	cursor: pointer;
-}
 
 @keyframes continuousRotate {
 	from {

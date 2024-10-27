@@ -5,6 +5,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { queryClient } from "./queryClient.ts";
+import "./main.module.css";
 
 const finalTransport = createConnectTransport({
 	baseUrl: "https://musicbox.averak.net",
