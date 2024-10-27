@@ -13,6 +13,7 @@ type Props = {
 	className?: string;
 };
 export const SheetTable = ({ notes, onChange, className }: Props) => {
+	console.log("notes", notes);
 	const audio = useMemo(() => new Audio(holeSound), []);
 	return (
 		<div className={className}>

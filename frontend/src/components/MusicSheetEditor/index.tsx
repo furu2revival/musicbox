@@ -19,7 +19,7 @@ export const MusicSheetEditor = ({
 	musicSheet,
 	energy,
 }: Props) => {
-	const notesInit: Note[] = Array(maxNotes).fill({ pitches: [] });
+	const notesInit: Note[] = Array(maxNotes).fill({ pitch: [] } as Note);
 	const [notes, setNotes] = useState<Note[]>(musicSheet?.notes ?? notesInit);
 	const { postMusicSheet } = usePostMusicSheet();
 
@@ -49,10 +49,10 @@ export const MusicSheetEditor = ({
 						navigator.clipboard
 							.writeText(url)
 							.then(() =>
-								alert(`URLがクリップボードにコピーされました: ${url}`)
+								alert(`URLがクリップボードにコピーされました: ${url}`),
 							)
 							.catch((err) =>
-								console.error("クリップボードへのコピーに失敗しました: ", err)
+								console.error("クリップボードへのコピーに失敗しました: ", err),
 							);
 				}}
 				isCharge={true}
