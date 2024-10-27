@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
+import type {
 	MusicSheetPlayer,
 	MusicSheetPlayerInit,
 } from "~/features/musicSheetPlayer/musicSheetPlayer";
@@ -8,7 +8,10 @@ import { createMusicSheetPlayer } from "~/features/musicSheetPlayer/musicSheetPl
 import type { PeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 import { createPeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 import type { ShakeDetectorInit } from "~/features/shakeDetecters";
-import { createShakeDetector, ShakeDetector } from "~/features/shakeDetecters";
+import {
+	type ShakeDetector,
+	createShakeDetector,
+} from "~/features/shakeDetecters";
 
 import windSprintSound from "~/assets/wind_spring.wav";
 
