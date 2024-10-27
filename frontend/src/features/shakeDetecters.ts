@@ -26,7 +26,7 @@ export class ShakeDetector extends EventTarget {
 	constructor(
 		init: ShakeDetectorInit = {
 			shakeDetectInterval: 100,
-			accelerationThreshold: 2,
+			accelerationThreshold: 5,
 		}
 	) {
 		super();
@@ -96,20 +96,21 @@ export class ShakeDetector extends EventTarget {
 			return 0;
 		}
 
+		const aX = acceleration.x ?? 0;
+		const aY = acceleration.y ?? 0;
+		const aZ = acceleration.z ?? 0;
+
 		// x,y,z軸の加速度のうち、最大のものを取得。かつ、閾値未満の場合は0を返す
-		const maxAcceleration = Math.max(
-			Math.abs(acceleration.x ?? 0),
-			Math.abs(acceleration.y ?? 0),
-			Math.abs(acceleration.z ?? 0)
-		);
+		const maxAcceleration = Math.max(Math.abs(aX), Math.abs(aY), Math.abs(aZ));
 		if (maxAcceleration < this._accelerationThreshold) {
 			return 0;
 		}
 
-		// x,y,z軸のうち最大の加速度を使って、等加速度運動だとみなし単位時間（timeThresholdMS）中にどれだけ移動したかの推測値を計算
+		// 等加速度運動だとみなし単位時間（timeThresholdMS）中にどれだけ移動したかの推測値を計算
+		const norm = Math.sqrt(aX ** 2 + aY ** 2 + aZ ** 2);
 		const deltaTimeSec = timeDiffMS / 1000;
 		// 加速度から移動量を計算（速度atをtで積分）
-		const moveAmountMeter = (maxAcceleration * deltaTimeSec ** 2) / 2;
+		const moveAmountMeter = (norm * deltaTimeSec ** 2) / 2;
 
 		return moveAmountMeter;
 	};
