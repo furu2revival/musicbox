@@ -44,7 +44,13 @@ export const MusicBox = ({
 				}}
 				className={`${isCharge ? style.rotate : ""}`}
 			>
-			<img width={32} src={propeller} alt="" />
+			<button
+					className={style.iconButton}
+					type="button"
+					disabled
+			>
+				<img width={32} src={propeller} alt="" />
+			</button>
 			</div>
 			<button
 				className={style.iconButton}
