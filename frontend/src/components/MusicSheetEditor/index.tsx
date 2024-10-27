@@ -5,28 +5,46 @@ import { type Note, NoteToResponse } from "~/model/note";
 import { MusicBox } from "./MusicBox";
 import { SheetTable } from "./SheetTable";
 import style from "./style.module.css";
+import { useMusicBox } from "~/hooks/furu2Musicbox";
 
 type Props = {
 	className?: string;
 	maxNotes: number;
 	musicSheet: MusicSheet | undefined;
-	energy: number;
+	maxEnergy: number;
 };
 
 export const MusicSheetEditor = ({
 	className,
 	maxNotes,
 	musicSheet,
-	energy,
+	maxEnergy,
 }: Props) => {
 	const notesInit: Note[] = Array(maxNotes).fill({ pitch: [] } as Note);
 	const [notes, setNotes] = useState<Note[]>(musicSheet?.notes ?? notesInit);
 	const { postMusicSheet } = usePostMusicSheet();
+  const musicBox = useMusicBox({
+    playerInit: {
+      musicSheet: {
+        id: musicSheet?.id ?? "",
+        title: musicSheet?.title ?? "",
+        notes,
+      },
+      beatsPerMinute: 120,
+      maxEnergy: maxEnergy ?? 100,
+    },
+    shakeDetectorInit: {
+      shakeDetectInterval: 100,
+      accelerationThreshold: 5,
+      moveAmountThreshold: 0.2,
+    },
+  });
 
 	return (
+    <>
 		<div className={`${style.root} ${className ?? ""}`}>
 			<MusicBox
-				energy={energy}
+				energy={musicBox.energy}
 				onReset={async () => {
 					setNotes(notesInit);
 				}}
@@ -49,10 +67,10 @@ export const MusicSheetEditor = ({
 						navigator.clipboard
 							.writeText(url)
 							.then(() =>
-								alert(`URLがクリップボードにコピーされました: ${url}`),
+								alert(`URLがクリップボードにコピーされました: ${url}`)
 							)
 							.catch((err) =>
-								console.error("クリップボードへのコピーに失敗しました: ", err),
+								console.error("クリップボードへのコピーに失敗しました: ", err)
 							);
 				}}
 				isCharge={true}
@@ -70,5 +88,19 @@ export const MusicSheetEditor = ({
 				}}
 			/>
 		</div>
+      <div>
+        <div>
+          ready: {musicBox.ready.toString()}
+        </div>
+        <div>
+          energy: {musicBox.energy} / {musicBox.maxEnergy}
+        </div>
+        <div>
+          <button onClick={() => musicBox.load()}>load</button>
+          <button onClick={() => musicBox.play()}>play</button>
+          <button onClick={() => musicBox.stop()}>stop</button>
+        </div>
+      </div>
+      </>
 	);
 };
