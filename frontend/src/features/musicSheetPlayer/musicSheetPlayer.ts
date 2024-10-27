@@ -29,7 +29,6 @@ export type MusicSheetPlayerInit = {
 	musicSheet: MusicSheet;
 	beatsPerMinute: number;
 	maxEnergy: number;
-	audioPlayerPerNode: number;
 };
 
 export class MusicSheetPlayer extends EventTarget {
@@ -63,16 +62,14 @@ export class MusicSheetPlayer extends EventTarget {
 		this.noteInterval = (60 / init.beatsPerMinute) * 1000;
 
 		this.audioPlayers = {} as typeof this.audioPlayers;
-		this.load(init.audioPlayerPerNode);
+		this.load();
 	}
 
-	private async load(poolSize: number) {
+	private async load() {
 		await Promise.all(
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
-				this.audioPlayers[pitch as Pitch] = await createAudioContextPlayer(
-					file,
-					poolSize
-				);
+				this.audioPlayers[pitch as Pitch] =
+					await createAudioContextPlayer(file);
 			})
 		);
 		this.dispatchEvent(new Event("load"));
