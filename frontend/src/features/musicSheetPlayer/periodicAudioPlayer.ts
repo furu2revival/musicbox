@@ -3,10 +3,11 @@ export class PeriodicAudioPlayer extends EventTarget {
 	startTime: number;
 	private playing = false;
 
-	constructor(src: string, startTime = 0) {
+	constructor(src: string, startTime = 0, volume = 1) {
 		super();
 
 		this.audio = new Audio(src);
+    this.audio.volume = volume;
 		this.startTime = startTime;
 
 		this.audio.addEventListener("canplaythrough", () => {
@@ -38,10 +39,11 @@ export class PeriodicAudioPlayer extends EventTarget {
 
 export const createPeriodicAudioPlayer = function (
 	src: string,
-	startTime = 0
+	startTime = 0,
+  volume = 1,
 ): Promise<PeriodicAudioPlayer> {
 	return new Promise((resolve, reject) => {
-		const player = new PeriodicAudioPlayer(src, startTime);
+		const player = new PeriodicAudioPlayer(src, startTime, volume);
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
