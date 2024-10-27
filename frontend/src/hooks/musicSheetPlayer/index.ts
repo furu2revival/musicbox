@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import type {
 	MusicSheetPlayer,
 	MusicSheetPlayerInit,
-} from "./musicSheetPlayer";
-import { createMusicSheetPlayer } from "./musicSheetPlayer";
-import {
-	type PeriodicAudioPlayer,
-	createPeriodicAudioPlayer,
-} from "./periodicAudioPlayer";
+} from '~/features/musicSheetPlayer/musicSheetPlayer';
+import { createMusicSheetPlayer } from '~/features/musicSheetPlayer/musicSheetPlayer';
+import type { PeriodicAudioPlayer } from '~/features/musicSheetPlayer/periodicAudioPlayer';
+import { createPeriodicAudioPlayer, } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 
 import windSprintSound from "~/assets/wind_spring.wav";
 
