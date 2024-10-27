@@ -45,8 +45,9 @@ func Test_handler_GetV1(t *testing.T) {
 			Given: given{
 				seeds: []fixture.Seed{
 					&dao.MusicSheet{
-						MusicSheetID: faker.UUIDv5("ms1").String(),
-						Title:        "ms1",
+						MusicSheetID:  faker.UUIDv5("ms1").String(),
+						Title:         "ms1",
+						NumberOfNotes: 2,
 					},
 					&dao.Note{
 						Index:        0,

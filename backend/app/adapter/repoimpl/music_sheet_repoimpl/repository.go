@@ -32,22 +32,25 @@ func (r Repository) Get(ctx context.Context, tx transaction.Transaction, id uuid
 		}
 		return model.MusicSheet{}, err
 	}
-	notes, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID), qm.OrderBy("Index")).All(ctx, tx)
+	noteDtos, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID), qm.OrderBy("Index")).All(ctx, tx)
 	if err != nil {
 		return model.MusicSheet{}, err
 	}
-	return model.NewMusicSheet(uuid.MustParse(musicSheet.MusicSheetID), musicSheet.Title, vector.Map(notes, func(note *dao.Note) model.Note {
-		return model.NewNote(vector.Map(note.Pitches, func(pitch int64) model.Pitch {
+	notes := make([]model.Note, musicSheet.NumberOfNotes)
+	for _, note := range noteDtos {
+		notes[note.Index] = model.NewNote(vector.Map(note.Pitches, func(pitch int64) model.Pitch {
 			return model.Pitch(pitch)
 		})...)
-	}))
+	}
+	return model.NewMusicSheet(uuid.MustParse(musicSheet.MusicSheetID), musicSheet.Title, notes)
 }
 
 func (r Repository) Save(ctx context.Context, tx transaction.Transaction, musicSheet model.MusicSheet) error {
 	{
 		dto := &dao.MusicSheet{
-			MusicSheetID: musicSheet.ID.String(),
-			Title:        musicSheet.Title,
+			MusicSheetID:  musicSheet.ID.String(),
+			Title:         musicSheet.Title,
+			NumberOfNotes: len(musicSheet.Notes),
 		}
 		err := dto.Upsert(ctx, tx, true, dao.MusicSheetPrimaryKeyColumns, boil.Infer(), boil.Infer())
 		if err != nil {
@@ -59,17 +62,17 @@ func (r Repository) Save(ctx context.Context, tx transaction.Transaction, musicS
 		if err != nil {
 			return err
 		}
-		newDtos := make([]*dao.Note, len(musicSheet.Notes))
+		newDtos := make([]*dao.Note, 0)
 		for i, note := range musicSheet.Notes {
 			pitches := make(types.Int64Array, len(note))
 			for j, pitch := range note {
 				pitches[j] = int64(pitch)
 			}
-			newDtos[i] = &dao.Note{
+			newDtos = append(newDtos, &dao.Note{
 				Index:        i,
 				MusicSheetID: musicSheet.ID.String(),
 				Pitches:      pitches,
-			}
+			})
 		}
 
 		upserted, deleted := CheckNoteDiff(newDtos, currentDtos)

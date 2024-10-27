@@ -35,8 +35,9 @@ func TestRepository_Get(t *testing.T) {
 			Given: given{
 				seeds: []fixture.Seed{
 					&dao.MusicSheet{
-						MusicSheetID: faker.UUIDv5("ms1").String(),
-						Title:        "ms1",
+						MusicSheetID:  faker.UUIDv5("ms1").String(),
+						Title:         "ms1",
+						NumberOfNotes: 3,
 					},
 					&dao.Note{
 						Index:        0,
@@ -46,7 +47,7 @@ func TestRepository_Get(t *testing.T) {
 						},
 					},
 					&dao.Note{
-						Index:        1,
+						Index:        2,
 						MusicSheetID: faker.UUIDv5("ms1").String(),
 						Pitches: types.Int64Array{
 							int64(model.PitchC3),
@@ -71,6 +72,7 @@ func TestRepository_Get(t *testing.T) {
 								{
 									model.PitchC3,
 								},
+								nil,
 								{
 									model.PitchC3,
 									model.PitchD3,
@@ -129,8 +131,9 @@ func TestRepository_Save(t *testing.T) {
 			Given: given{
 				seeds: []fixture.Seed{
 					&dao.MusicSheet{
-						MusicSheetID: faker.UUIDv5("ms1").String(),
-						Title:        "ms1",
+						MusicSheetID:  faker.UUIDv5("ms1").String(),
+						Title:         "ms1",
+						NumberOfNotes: 1,
 					},
 					&dao.Note{
 						Index:        0,
@@ -153,9 +156,7 @@ func TestRepository_Save(t *testing.T) {
 									model.PitchA4,
 									model.PitchB4,
 								},
-								{
-									model.PitchC4,
-								},
+								{},
 								{
 									model.PitchC3,
 								},
@@ -173,9 +174,7 @@ func TestRepository_Save(t *testing.T) {
 									model.PitchA4,
 									model.PitchB4,
 								},
-								{
-									model.PitchC4,
-								},
+								{},
 								{
 									model.PitchC3,
 								},

@@ -23,51 +23,81 @@ import (
 
 // MusicSheet is an object representing the database table.
 type MusicSheet struct {
-	MusicSheetID string    `boil:"music_sheet_id" json:"music_sheet_id" toml:"music_sheet_id" yaml:"music_sheet_id"`
-	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	MusicSheetID  string    `boil:"music_sheet_id" json:"music_sheet_id" toml:"music_sheet_id" yaml:"music_sheet_id"`
+	Title         string    `boil:"title" json:"title" toml:"title" yaml:"title"`
+	NumberOfNotes int       `boil:"number_of_notes" json:"number_of_notes" toml:"number_of_notes" yaml:"number_of_notes"`
+	CreatedAt     time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt     time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *musicSheetR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L musicSheetL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var MusicSheetColumns = struct {
-	MusicSheetID string
-	Title        string
-	CreatedAt    string
-	UpdatedAt    string
+	MusicSheetID  string
+	Title         string
+	NumberOfNotes string
+	CreatedAt     string
+	UpdatedAt     string
 }{
-	MusicSheetID: "music_sheet_id",
-	Title:        "title",
-	CreatedAt:    "created_at",
-	UpdatedAt:    "updated_at",
+	MusicSheetID:  "music_sheet_id",
+	Title:         "title",
+	NumberOfNotes: "number_of_notes",
+	CreatedAt:     "created_at",
+	UpdatedAt:     "updated_at",
 }
 
 var MusicSheetTableColumns = struct {
-	MusicSheetID string
-	Title        string
-	CreatedAt    string
-	UpdatedAt    string
+	MusicSheetID  string
+	Title         string
+	NumberOfNotes string
+	CreatedAt     string
+	UpdatedAt     string
 }{
-	MusicSheetID: "music_sheets.music_sheet_id",
-	Title:        "music_sheets.title",
-	CreatedAt:    "music_sheets.created_at",
-	UpdatedAt:    "music_sheets.updated_at",
+	MusicSheetID:  "music_sheets.music_sheet_id",
+	Title:         "music_sheets.title",
+	NumberOfNotes: "music_sheets.number_of_notes",
+	CreatedAt:     "music_sheets.created_at",
+	UpdatedAt:     "music_sheets.updated_at",
 }
 
 // Generated where
 
+type whereHelperint struct{ field string }
+
+func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+func (w whereHelperint) IN(slice []int) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
+}
+func (w whereHelperint) NIN(slice []int) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
+}
+
 var MusicSheetWhere = struct {
-	MusicSheetID whereHelperstring
-	Title        whereHelperstring
-	CreatedAt    whereHelpertime_Time
-	UpdatedAt    whereHelpertime_Time
+	MusicSheetID  whereHelperstring
+	Title         whereHelperstring
+	NumberOfNotes whereHelperint
+	CreatedAt     whereHelpertime_Time
+	UpdatedAt     whereHelpertime_Time
 }{
-	MusicSheetID: whereHelperstring{field: "\"music_sheets\".\"music_sheet_id\""},
-	Title:        whereHelperstring{field: "\"music_sheets\".\"title\""},
-	CreatedAt:    whereHelpertime_Time{field: "\"music_sheets\".\"created_at\""},
-	UpdatedAt:    whereHelpertime_Time{field: "\"music_sheets\".\"updated_at\""},
+	MusicSheetID:  whereHelperstring{field: "\"music_sheets\".\"music_sheet_id\""},
+	Title:         whereHelperstring{field: "\"music_sheets\".\"title\""},
+	NumberOfNotes: whereHelperint{field: "\"music_sheets\".\"number_of_notes\""},
+	CreatedAt:     whereHelpertime_Time{field: "\"music_sheets\".\"created_at\""},
+	UpdatedAt:     whereHelpertime_Time{field: "\"music_sheets\".\"updated_at\""},
 }
 
 // MusicSheetRels is where relationship names are stored.
@@ -98,8 +128,8 @@ func (r *musicSheetR) GetNotes() NoteSlice {
 type musicSheetL struct{}
 
 var (
-	musicSheetAllColumns            = []string{"music_sheet_id", "title", "created_at", "updated_at"}
-	musicSheetColumnsWithoutDefault = []string{"music_sheet_id", "title"}
+	musicSheetAllColumns            = []string{"music_sheet_id", "title", "number_of_notes", "created_at", "updated_at"}
+	musicSheetColumnsWithoutDefault = []string{"music_sheet_id", "title", "number_of_notes"}
 	musicSheetColumnsWithDefault    = []string{"created_at", "updated_at"}
 	musicSheetPrimaryKeyColumns     = []string{"music_sheet_id"}
 	musicSheetGeneratedColumns      = []string{}
