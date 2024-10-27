@@ -1,4 +1,4 @@
-interface ShakeDetectorInit {
+export interface ShakeDetectorInit {
 	/**
 	 * シェイク検出の閾値となる時間（ミリ秒）
 	 */
@@ -134,4 +134,14 @@ export class ShakeDetector extends EventTarget {
 
 		return moveAmountMeter;
 	};
+}
+
+export const createShakeDetector = function(init: ShakeDetectorInit): Promise<ShakeDetector> {
+  return new Promise((resolve) => {
+    const detector = new ShakeDetector(init);
+    detector.addEventListener("load", () => {
+      resolve(detector);
+    });
+    detector.enableShakeDetector();
+  });
 }
