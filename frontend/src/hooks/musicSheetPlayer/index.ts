@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import type {
 	MusicSheetPlayer,
 	MusicSheetPlayerInit,
-} from '~/features/musicSheetPlayer/musicSheetPlayer';
-import { createMusicSheetPlayer } from '~/features/musicSheetPlayer/musicSheetPlayer';
-import type { PeriodicAudioPlayer } from '~/features/musicSheetPlayer/periodicAudioPlayer';
-import { createPeriodicAudioPlayer, } from "~/features/musicSheetPlayer/periodicAudioPlayer";
+} from "~/features/musicSheetPlayer/musicSheetPlayer";
+import { createMusicSheetPlayer } from "~/features/musicSheetPlayer/musicSheetPlayer";
+import type { PeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
+import { createPeriodicAudioPlayer } from "~/features/musicSheetPlayer/periodicAudioPlayer";
 
 import windSprintSound from "~/assets/wind_spring.wav";
 
-export const useMusicSheetPlayer = function (init: MusicSheetPlayerInit) {
+export const useMusicSheetPlayer = (init: MusicSheetPlayerInit) => {
 	const [player, setPlayer] = useState<MusicSheetPlayer | null>(null);
 	const [windPlayer, setWindPlayer] = useState<PeriodicAudioPlayer | null>(
 		null
