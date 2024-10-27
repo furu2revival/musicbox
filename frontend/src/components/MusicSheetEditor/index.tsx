@@ -30,7 +30,7 @@ export const MusicSheetEditor = ({
 				title: musicSheet?.title ?? "",
 				notes,
 			},
-			beatsPerMinute: 120,
+			beatsPerMinute: 120 * 2,
 			maxEnergy: maxEnergy ?? 100,
 		},
 		shakeDetectorInit: {
