@@ -1,9 +1,9 @@
 import type { MusicSheet } from "~/model/musicSheet";
 import type { Pitch } from "~/model/note";
 import {
-	type PooledAudioPlayer,
-	createPooledAudioPlayer,
-} from "./pooledAudioPlayer";
+	type AudioContextPlayer,
+	createAudioContextPlayer,
+} from "./audioContextPlayer";
 
 import soundFileA4 from "~/assets/A4.mp3";
 import soundFileB4 from "~/assets/B4.mp3";
@@ -33,11 +33,11 @@ export type MusicSheetPlayerInit = {
 };
 
 export class MusicSheetPlayer extends EventTarget {
-	private audioPlayers: Record<Pitch, PooledAudioPlayer>;
+	private audioPlayers: Record<Pitch, AudioContextPlayer>;
 	private musicSheet: MusicSheet;
 	/** Ability to play music (unit: beats) */
 	private _energy = 0;
-	private maxEnergy: number;
+	private _maxEnergy: number;
 	private noteInterval: number;
 
 	private indexInSheet = 0;
@@ -45,6 +45,9 @@ export class MusicSheetPlayer extends EventTarget {
 
 	get energy() {
 		return this._energy;
+	}
+	get maxEnergy() {
+		return this._maxEnergy;
 	}
 
 	set energy(value: number) {
@@ -56,7 +59,7 @@ export class MusicSheetPlayer extends EventTarget {
 		super();
 
 		this.musicSheet = init.musicSheet;
-		this.maxEnergy = init.maxEnergy;
+		this._maxEnergy = init.maxEnergy;
 		this.noteInterval = (60 / init.beatsPerMinute) * 1000;
 
 		this.audioPlayers = {} as typeof this.audioPlayers;
@@ -66,11 +69,11 @@ export class MusicSheetPlayer extends EventTarget {
 	private async load(poolSize: number) {
 		await Promise.all(
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
-				this.audioPlayers[pitch as Pitch] = await createPooledAudioPlayer(
+				this.audioPlayers[pitch as Pitch] = await createAudioContextPlayer(
 					file,
-					poolSize,
+					poolSize
 				);
-			}),
+			})
 		);
 		this.dispatchEvent(new Event("load"));
 	}
@@ -85,7 +88,7 @@ export class MusicSheetPlayer extends EventTarget {
 	}
 
 	setEnergy(energy: number) {
-		this.energy = Math.min(energy, this.maxEnergy);
+		this.energy = Math.min(energy, this._maxEnergy);
 	}
 
 	private playNext() {
@@ -97,7 +100,6 @@ export class MusicSheetPlayer extends EventTarget {
 		this.energy -= 1;
 
 		const note = this.musicSheet.notes[this.indexInSheet];
-		console.log(note);
 		for (const pitch of note.pitch) {
 			this.audioPlayers[pitch].play();
 		}
@@ -107,12 +109,13 @@ export class MusicSheetPlayer extends EventTarget {
 	}
 }
 
-export const createMusicSheetPlayer = async (
-	init: MusicSheetPlayerInit,
-): Promise<MusicSheetPlayer> =>
-	new Promise((resolve) => {
+export const createMusicSheetPlayer = async function (
+	init: MusicSheetPlayerInit
+): Promise<MusicSheetPlayer> {
+	return new Promise((resolve) => {
 		const player = new MusicSheetPlayer(init);
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
 	});
+};

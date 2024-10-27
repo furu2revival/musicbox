@@ -1,10 +1,7 @@
-const isPlaying = function (audio: HTMLAudioElement) {
-	return audio.currentTime > 0 && !audio.paused && !audio.ended;
-};
-
 const loadAudio = function (src: string): Promise<HTMLAudioElement> {
 	return new Promise((resolve, reject) => {
 		const audio = new Audio(src);
+		audio.preload = "auto";
 		audio.addEventListener("canplaythrough", () => {
 			resolve(audio);
 		});
@@ -16,9 +13,11 @@ const loadAudio = function (src: string): Promise<HTMLAudioElement> {
 
 export class PooledAudioPlayer extends EventTarget {
 	private audio: HTMLAudioElement[] = [];
+	private index = 0;
 
 	constructor(soundFile: string, poolSize: number) {
 		super();
+
 		this.load(soundFile, poolSize);
 	}
 
@@ -30,10 +29,19 @@ export class PooledAudioPlayer extends EventTarget {
 	}
 
 	play() {
-		const audio = this.audio.find((audio) => !isPlaying(audio));
-		if (!audio) return;
+		this.index = (this.index + 1) % this.audio.length;
+		const audio = this.audio[this.index];
 
+		audio.currentTime = 0;
 		audio.play();
+
+		console.log(
+			"play",
+			audio.currentSrc,
+			this.index,
+			audio.paused,
+			audio.ended
+		);
 	}
 }
 
