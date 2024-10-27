@@ -74,6 +74,7 @@ export const MusicSheetEditor = ({
 								);
 					}}
 					isCharge={true}
+          shareDisabled={notes.every((note) => note.pitch.length === 0)}
 				/>
 				<SheetTable
 					notes={notes}
