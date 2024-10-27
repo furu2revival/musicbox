@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import resetSound from "~/assets/reset.mp3";
 import share from "~/assets/share.png";
 import trashCan from "~/assets/trash_can.png";
+import propeller from "~/assets/propeller.png";
 import style from "./style.module.css";
 
 type Props = {
@@ -34,7 +35,7 @@ export const MusicBox = ({
 				}}
 				className={`${isCharge ? style.rotate : ""}`}
 			>
-				ぷ
+			<img width={32} src={propeller} alt="" />
 			</div>
 			<button
 				className={style.deleteButton}
