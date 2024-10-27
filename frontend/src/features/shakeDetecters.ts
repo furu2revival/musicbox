@@ -89,6 +89,7 @@ export class ShakeDetector extends EventTarget {
 		const currentTime = new Date().getTime();
 		const deltaTime = currentTime - this._lastTime;
 		if (deltaTime < this._shakeDetectInterval) return;
+		this._lastTime = currentTime;
 
 		const moveAmount = this._calculateMoveAmount(event, deltaTime);
 		this._currentMoveAmount = moveAmount;
@@ -96,7 +97,6 @@ export class ShakeDetector extends EventTarget {
 
 		this._dispatchShakeEvent();
 
-		this._lastTime = currentTime;
 		this.dispatchEvent(new Event("move"));
 	};
 
@@ -136,12 +136,14 @@ export class ShakeDetector extends EventTarget {
 	};
 }
 
-export const createShakeDetector = function(init: ShakeDetectorInit): Promise<ShakeDetector> {
-  return new Promise((resolve) => {
-    const detector = new ShakeDetector(init);
-    detector.addEventListener("load", () => {
-      resolve(detector);
-    });
-    detector.enableShakeDetector();
-  });
-}
+export const createShakeDetector = function (
+	init: ShakeDetectorInit
+): Promise<ShakeDetector> {
+	return new Promise((resolve) => {
+		const detector = new ShakeDetector(init);
+		detector.addEventListener("load", () => {
+			resolve(detector);
+		});
+		detector.enableShakeDetector();
+	});
+};
