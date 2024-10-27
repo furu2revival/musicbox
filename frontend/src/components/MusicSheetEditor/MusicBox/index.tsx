@@ -9,6 +9,7 @@ type Props = {
 	onShare: () => void;
 	onReset: () => void;
 	isCharge?: boolean;
+	shareDisabled: boolean;
 	energy: number;
 };
 
@@ -17,13 +18,19 @@ export const MusicBox = ({
 	onShare,
 	onReset,
 	isCharge,
+	shareDisabled,
 	energy,
 }: Props) => {
 	const resetAudio = useMemo(() => new Audio(resetSound), []);
 	const shakeIntensity = energy * 0.1;
 	return (
 		<div className={`${style.root} ${className}`}>
-			<button className={style.shareButton} type="button" onClick={onShare}>
+			<button
+				className={`${style.shareButton} ${shareDisabled ? style.disabled : ""}`}
+				type="button"
+				onClick={onShare}
+				disabled={shareDisabled}
+			>
 				<img width={32} src={share} alt="" />
 			</button>
 			<div
