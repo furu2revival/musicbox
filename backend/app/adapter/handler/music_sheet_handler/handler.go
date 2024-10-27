@@ -22,26 +22,12 @@ func NewHandler(uc *music_sheet_usecase.Usecase, proxy aop.Proxy) apiconnect.Mus
 }
 
 func (h handler) GetV1(ctx context.Context, req *aop.Request[*api.MusicSheetServiceGetV1Request]) (*api.MusicSheetServiceGetV1Response, error) {
-	// TODO: #12 実装する
+	result, err := h.uc.Get(ctx, req.RequestContext(), uuid.MustParse(req.Msg().GetMusicSheetId()))
+	if err != nil {
+		return nil, err
+	}
 	return &api.MusicSheetServiceGetV1Response{
-		MusicSheet: &api.MusicSheet{
-			MusicSheetId: uuid.NewString(),
-			Title:        "dummy",
-			Notes: []*api.Note{
-				{
-					Pitches: []api.Pitch{
-						api.Pitch_PITCH_C3,
-						api.Pitch_PITCH_D3,
-					},
-				},
-				{
-					Pitches: []api.Pitch{
-						api.Pitch_PITCH_C3,
-						api.Pitch_PITCH_D3,
-					},
-				},
-			},
-		},
+		MusicSheet: pbconv.ToMusicSheetPb(result),
 	}, nil
 }
 
