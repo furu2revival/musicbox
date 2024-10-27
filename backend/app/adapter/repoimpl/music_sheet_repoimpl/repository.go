@@ -14,6 +14,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/types"
 )
 
@@ -31,7 +32,7 @@ func (r Repository) Get(ctx context.Context, tx transaction.Transaction, id uuid
 		}
 		return model.MusicSheet{}, err
 	}
-	notes, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID)).All(ctx, tx)
+	notes, err := dao.Notes(dao.NoteWhere.MusicSheetID.EQ(musicSheet.MusicSheetID), qm.OrderBy("Index")).All(ctx, tx)
 	if err != nil {
 		return model.MusicSheet{}, err
 	}
