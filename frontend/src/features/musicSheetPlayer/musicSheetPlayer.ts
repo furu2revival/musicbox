@@ -42,18 +42,18 @@ export class MusicSheetPlayer extends EventTarget {
 	private indexInSheet = 0;
 	private timeout: number | undefined = undefined;
 
-  get energy() {
-    return this._energy;
-  }
-  set energy(value: number) {
-    console.log(this._maxEnergy);
-    this._energy = Math.min(value, this.maxEnergy);
-    this.dispatchEvent(new Event("energychange"));
-  }
+	get energy() {
+		return this._energy;
+	}
+	set energy(value: number) {
+		console.log(this._maxEnergy);
+		this._energy = Math.min(value, this.maxEnergy);
+		this.dispatchEvent(new Event("energychange"));
+	}
 
-  get maxEnergy() {
-    return this._maxEnergy;
-  }
+	get maxEnergy() {
+		return this._maxEnergy;
+	}
 
 	constructor(init: MusicSheetPlayerInit) {
 		super();

@@ -75,10 +75,10 @@ export const useMusicBox = function (init: UseMusicBoxInit) {
 		};
 	}, [player, windPlayer, shakeDetector]);
 
-  useEffect(() => {
-    if(!player) return
-    player.musicSheet = init.playerInit.musicSheet;
-  }, [init.playerInit.musicSheet]);
+	useEffect(() => {
+		if (!player) return;
+		player.musicSheet = init.playerInit.musicSheet;
+	}, [init.playerInit.musicSheet]);
 
 	useEffect(() => {
 		if (!player) return;
