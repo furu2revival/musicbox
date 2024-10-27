@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"sort"
 
 	"github.com/furu2revival/musicbox/app/adapter/dao"
 	"github.com/furu2revival/musicbox/app/domain/model"
