@@ -5,7 +5,7 @@
 	background-color: rgb(184, 109, 75);
 	padding: 1rem;
 }
-.shareButton{
+.shareButton {
 	background-color: rgb(184, 109, 75);
 	color: white;
 	border: none;
@@ -14,7 +14,7 @@
 	cursor: pointer;
 }
 
-.deleteButton{
+.deleteButton {
 	background-color: rgb(184, 109, 75);
 	color: white;
 	border: none;
@@ -24,22 +24,32 @@
 }
 
 @keyframes continuousRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .rotate {
-  animation: continuousRotate 2s linear infinite;
+	animation: continuousRotate 2s linear infinite;
 }
 
 @keyframes shake {
-	0% { transform: translate(0, 0); }
-	25% { transform: translate(-1px, 1px); }
-	50% { transform: translate(1px, -1px); }
-	75% { transform: translate(-1px, -1px); }
-	100% { transform: translate(0, 0); }
+	0% {
+		transform: translate(0, 0);
+	}
+	25% {
+		transform: translate(-1px, 1px);
+	}
+	50% {
+		transform: translate(1px, -1px);
+	}
+	75% {
+		transform: translate(-1px, -1px);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
 }
