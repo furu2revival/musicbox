@@ -33,7 +33,7 @@ export const SheetTable = ({ notes, onChange, className }: Props) => {
 									i
 								}
 							>
-								{i}
+								{i + 1}
 							</th>
 						))}
 					</tr>
