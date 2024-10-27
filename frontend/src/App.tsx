@@ -1,7 +1,6 @@
 import { MusicSheetEditor } from "./components/MusicSheetEditor";
 import { useMusicSheet } from "./hooks/useMusicSheet";
 import { MusicSheetFromResponse } from "./model/musicSheet";
-import { NoteFromResponse } from "./model/note";
 
 function App() {
 	const currentUrl = new URL(window.location.href);

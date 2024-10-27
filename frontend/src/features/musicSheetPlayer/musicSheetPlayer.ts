@@ -66,14 +66,12 @@ export class MusicSheetPlayer extends EventTarget {
 		this.load(init.audioPlayerPerNode);
 	}
 
-	private async load(poolSize: number) {
+	private async load(_poolSize: number) {
 		await Promise.all(
 			Object.entries(soundFiles).map(async ([pitch, file]) => {
-				this.audioPlayers[pitch as Pitch] = await createAudioContextPlayer(
-					file,
-					poolSize
-				);
-			})
+				this.audioPlayers[pitch as Pitch] =
+					await createAudioContextPlayer(file);
+			}),
 		);
 		this.dispatchEvent(new Event("load"));
 	}
@@ -109,13 +107,12 @@ export class MusicSheetPlayer extends EventTarget {
 	}
 }
 
-export const createMusicSheetPlayer = async function (
-	init: MusicSheetPlayerInit
-): Promise<MusicSheetPlayer> {
-	return new Promise((resolve) => {
+export const createMusicSheetPlayer = async (
+	init: MusicSheetPlayerInit,
+): Promise<MusicSheetPlayer> =>
+	new Promise((resolve) => {
 		const player = new MusicSheetPlayer(init);
 		player.addEventListener("load", () => {
 			resolve(player);
 		});
 	});
-};

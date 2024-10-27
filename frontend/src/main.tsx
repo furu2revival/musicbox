@@ -1,6 +1,5 @@
 import { TransportProvider } from "@bufbuild/connect-query";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { QueryClient } from "@tanstack/query-core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

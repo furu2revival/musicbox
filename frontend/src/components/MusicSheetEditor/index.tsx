@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePostMusicSheet } from "~/hooks/usePostMusicSheet";
 import type { MusicSheet } from "~/model/musicSheet";
-import { type Note, NoteFromResponse, NoteToResponse } from "~/model/note";
+import { type Note, NoteToResponse } from "~/model/note";
 import { MusicBox } from "./MusicBox";
 import { SheetTable } from "./SheetTable";
 import style from "./style.module.css";
