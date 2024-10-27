@@ -42,7 +42,6 @@ export const MusicSheetEditor = ({
 					if (navigator.share)
 						await navigator.share({
 							title: "ふるふるオルゴール",
-							text: "オルゴールオリジナル楽曲",
 							url,
 						});
 					else
@@ -55,7 +54,7 @@ export const MusicSheetEditor = ({
 								console.error("クリップボードへのコピーに失敗しました: ", err),
 							);
 				}}
-				isCharge={true}
+				shareDisabled={notes.every((note) => note.pitch.length === 0)}
 			/>
 			<SheetTable
 				notes={notes}
