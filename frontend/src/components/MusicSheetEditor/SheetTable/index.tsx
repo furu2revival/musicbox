@@ -1,11 +1,11 @@
 import "./style.module.css";
+import { useMemo } from "react";
 import holeSound from "~/assets/hole.mp3";
 import type { Note, Pitch } from "~/model/note";
 import { Hole } from "./Hole";
 import style from "./style.module.css";
-import { usePeriodicAudioPlayer } from "~/hooks/periodicAudioPlayer";
 
-const PITCHES: Pitch[] = ["C3", "D3", "E3", "F3", "G3", "A4", "B4", "C4"];
+const PITCHES: Pitch[] = ["C4", "B4", "A4", "G3", "F3", "E3", "D3", "C3"];
 
 type Props = {
 	notes: Note[];
@@ -13,8 +13,7 @@ type Props = {
 	className?: string;
 };
 export const SheetTable = ({ notes, onChange, className }: Props) => {
-  const { player } = usePeriodicAudioPlayer(holeSound, 0.025, 0.3);
-
+	const audio = useMemo(() => new Audio(holeSound), []);
 	return (
 		<div className={className}>
 			<table
@@ -55,7 +54,7 @@ export const SheetTable = ({ notes, onChange, className }: Props) => {
 												i
 											}`}
 											onClick={() => {
-												if (!isHoled) player?.play(0, 1);
+												if (!isHoled) audio.play();
 												onChange?.(i, pitch);
 											}}
 										>
