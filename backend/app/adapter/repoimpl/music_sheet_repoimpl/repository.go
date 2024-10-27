@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"sort"
 
 	"github.com/furu2revival/musicbox/app/adapter/dao"
 	"github.com/furu2revival/musicbox/app/domain/model"
@@ -35,6 +36,9 @@ func (r Repository) Get(ctx context.Context, tx transaction.Transaction, id uuid
 	if err != nil {
 		return model.MusicSheet{}, err
 	}
+	sort.SliceStable(notes, func(i, j int) bool {
+        return notes[i].Index < notes[j].Index
+    })
 	return model.NewMusicSheet(uuid.MustParse(musicSheet.MusicSheetID), musicSheet.Title, vector.Map(notes, func(note *dao.Note) model.Note {
 		return model.NewNote(vector.Map(note.Pitches, func(pitch int64) model.Pitch {
 			return model.Pitch(pitch)
